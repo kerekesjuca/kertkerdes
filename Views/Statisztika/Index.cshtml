@@ -1,4 +1,109 @@
-﻿<h2>Statisztika</h2>
+﻿@{
+    ViewData["Title"] = "Statisztika";
+}
 
-<p>Kérdések: @ViewBag.KerdesDb</p>
-<p>Válaszok: @ViewBag.ValaszDb</p>
+<div class="admin-header mb-4">
+
+    <h2>
+
+        <i class="bi bi-bar-chart-line"></i>
+        Közösségi statisztika
+
+    </h2>
+
+    <p class="text-muted">
+
+        Jóváhagyott tartalmak összesítése
+
+    </p>
+
+</div>
+
+
+<div class="row">
+
+    <div class="col-md-4">
+
+        <div class="stat-card-green">
+
+            <div class="stat-number">
+
+                @ViewBag.KerdesDb
+
+            </div>
+
+            <div class="stat-label">
+
+                Kérdés
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <div class="col-md-4">
+
+        <div class="stat-card-green">
+
+            <div class="stat-number">
+
+                @ViewBag.ValaszDb
+
+            </div>
+
+            <div class="stat-label">
+
+                Válasz
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <div class="col-md-4">
+
+        <div class="stat-card-green">
+
+            <div class="stat-number">
+
+                1
+
+            </div>
+
+            <div class="stat-label">
+
+                Moderátor
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+
+<div class="card question-card mt-4">
+
+    <div class="card-body p-4">
+
+        <h4>
+
+            <i class="bi bi-info-circle"></i>
+            Rendszer állapot
+
+        </h4>
+
+        <p class="text-muted">
+
+            A rendszer megfelelően működik, az adatbázis kapcsolódás aktív.
+
+        </p>
+
+    </div>
+
+</div>

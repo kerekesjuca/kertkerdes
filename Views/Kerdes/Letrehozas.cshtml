@@ -1,45 +1,79 @@
 ﻿@model KertKerdes.Models.Kerdes
 
 @{
-    ViewData["Title"] = "Új kérdés";
+    ViewData["Title"] = "Új kérdés feltevése";
 }
 
-<h2>Új kérdés feltevése</h2>
+<link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
+<div class="card question-card">
 
-<form method="post">
+    <div class="card-body p-4">
 
-    <div class="mb-3">
+        <h2 class="mb-4">
 
-        <label class="form-label">Cím</label>
+            <i class="bi bi-plus-circle"></i>
+            Új kérdés feltevése
 
-        <input name="Cim"
-               class="form-control" />
+        </h2>
+
+        <form method="post">
+
+            <div class="mb-4">
+
+                <label class="form-label">
+
+                    <i class="bi bi-pencil"></i>
+                    Kérdés címe
+
+                </label>
+
+                <input name="Cim"
+                       class="form-control form-control-lg" />
+
+            </div>
+
+
+            <div class="mb-4">
+
+                <label class="form-label">
+
+                    <i class="bi bi-card-text"></i>
+                    Kérdés leírása
+
+                </label>
+
+                <textarea name="Leiras"
+                          class="form-control"
+                          rows="5"></textarea>
+
+            </div>
+
+
+            <div class="mb-4">
+
+                <label class="form-label">
+
+                    <i class="bi bi-tag"></i>
+                    Témakör
+
+                </label>
+
+                <input name="Temakor"
+                       class="form-control" />
+
+            </div>
+
+
+            <button type="submit"
+                    class="btn btn-success btn-lg">
+
+                <i class="bi bi-send"></i>
+                Beküldés
+
+            </button>
+
+        </form>
 
     </div>
 
-    <div class="mb-3">
-
-        <label class="form-label">Leírás</label>
-
-        <textarea name="Leiras"
-                  class="form-control"></textarea>
-
-    </div>
-
-    <div class="mb-3">
-
-        <label class="form-label">Témakör</label>
-
-        <input name="Temakor"
-               class="form-control" />
-
-    </div>
-
-    <button type="submit"
-            class="btn btn-success">
-
-        Beküldés
-
-    </button>
-
-</form>
+</div>

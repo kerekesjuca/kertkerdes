@@ -1,79 +1,133 @@
 ﻿@model KertKerdes.Models.AdminViewModel
 
 @{
-    ViewData["Title"] = "Admin";
+    ViewData["Title"] = "Moderátori felület";
 }
 
-<h2>Moderátor felület</h2>
+<div class="admin-header mb-4">
 
-<h3>Jóváhagyásra váró kérdések</h3>
+    <h2>Moderátori felület</h2>
 
-<table class="table">
+    <p class="text-muted">
+        Beküldött kérdések és válaszok jóváhagyása
+    </p>
 
-    <tr>
-        <th>Cím</th>
-        <th>Művelet</th>
-    </tr>
+</div>
+
+
+<div class="admin-tabs mb-4">
+
+    <span class="badge bg-success">
+        Várakozó kérdések @Model.VarakozoKerdesek.Count
+    </span>
+
+    <span class="badge bg-primary ms-2">
+        Adott válaszok @Model.VarakozoValaszok.Count
+    </span>
+
+</div>
+
+
+@if (Model.VarakozoKerdesek.Any())
+{
+    <h4>Kérdések</h4>
 
     @foreach (var kerdes in Model.VarakozoKerdesek)
     {
-        <tr>
-            <td>@kerdes.Cim</td>
-            <td>
+        <div class="card admin-card mb-3">
 
-                <a href="/Admin/KerdesJovahagy/@kerdes.Id"
-                   class="btn btn-success btn-sm">
+            <div class="card-body">
 
-                    Jóváhagyás
+                <div class="row align-items-center">
 
-                </a>
+                    <div class="col-md-8">
 
-                <a href="/Admin/KerdesTorles/@kerdes.Id"
-                   class="btn btn-danger btn-sm">
+                        <h5>@kerdes.Cim</h5>
 
-                    Törlés
+                        <p class="text-muted">
+                            @kerdes.Leiras
+                        </p>
 
-                </a>
+                        <span class="badge bg-light text-dark">
+                            @kerdes.Temakor
+                        </span>
 
-            </td>
-        </tr>
+                    </div>
+
+                    <div class="col-md-4 text-end">
+
+                        <a href="/Kerdes/Reszletek/@kerdes.Id"
+                           class="btn btn-outline-secondary btn-sm">
+
+                            Megtekintés
+
+                        </a>
+
+                        <a href="/Admin/KerdesJovahagy/@kerdes.Id"
+                           class="btn btn-success btn-sm">
+
+                            Jóváhagyás
+
+                        </a>
+
+                        <a href="/Admin/KerdesTorles/@kerdes.Id"
+                           class="btn btn-danger btn-sm">
+
+                            Törlés
+
+                        </a>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
     }
+}
 
-</table>
 
-<hr />
-
-<h3>Jóváhagyásra váró válaszok</h3>
-
-<table class="table">
-
-    <tr>
-        <th>Válasz</th>
-        <th>Művelet</th>
-    </tr>
+@if (Model.VarakozoValaszok.Any())
+{
+    <h4 class="mt-5">Válaszok</h4>
 
     @foreach (var valasz in Model.VarakozoValaszok)
     {
-        <tr>
-            <td>@valasz.Szoveg</td>
-            <td>
+        <div class="card admin-card mb-3">
 
-                <a href="/Admin/ValaszJovahagy/@valasz.Id"
-                   class="btn btn-success btn-sm">
+            <div class="card-body">
 
-                    Jóváhagyás
+                <div class="row align-items-center">
 
-                </a>
+                    <div class="col-md-8">
 
-                <a href="/Admin/ValaszTorles/@valasz.Id"
-                   class="btn btn-danger btn-sm">
+                        <p>@valasz.Szoveg</p>
 
-                    Törlés
+                    </div>
 
-                </a>
+                    <div class="col-md-4 text-end">
 
-            </td>
-        </tr>
+                        <a href="/Admin/ValaszJovahagy/@valasz.Id"
+                           class="btn btn-success btn-sm">
+
+                            Jóváhagyás
+
+                        </a>
+
+                        <a href="/Admin/ValaszTorles/@valasz.Id"
+                           class="btn btn-danger btn-sm">
+
+                            Törlés
+
+                        </a>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
     }
-
-</table>
+}

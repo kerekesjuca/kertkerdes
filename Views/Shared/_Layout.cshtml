@@ -7,111 +7,80 @@
     <title>@ViewData["Title"] - KertKerdes</title>
 
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
-    <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
-    <link rel="stylesheet" href="~/KertKerdes.styles.css" asp-append-version="true" />
+
+    <link rel="stylesheet"
+          href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css" />
+
+    <link rel="stylesheet"
+          href="~/css/site.css"
+          asp-append-version="true" />
 </head>
 
 <body>
 
-    <header>
+    <header class="main-header">
 
-        <nav class="navbar navbar-expand-sm navbar-light bg-white border-bottom box-shadow mb-3">
+        <div class="container d-flex justify-content-between align-items-center py-3">
 
-            <div class="container-fluid">
+            <a asp-controller="Kerdes"
+               asp-action="Index"
+               class="logo-box text-decoration-none">
 
-                <a class="navbar-brand"
-                   asp-controller="Kerdes"
-                   asp-action="Index">
+                <div class="logo-icon">
 
-                    KertKerdes
+                    <i class="bi bi-flower1"></i>
+
+                </div>
+
+                <span>Kertészeti Közösség</span>
+
+            </a>
+
+
+            <div class="d-flex gap-3 align-items-center">
+
+                <a asp-controller="Admin"
+                   asp-action="Index"
+                   class="nav-modern-btn">
+
+                    <i class="bi bi-shield"></i>
+                    Moderálás
 
                 </a>
 
-                <button class="navbar-toggler"
-                        type="button"
-                        data-bs-toggle="collapse"
-                        data-bs-target=".navbar-collapse">
+                <div class="user-badge">
 
-                    <span class="navbar-toggler-icon"></span>
-
-                </button>
-
-                <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
-
-                    <ul class="navbar-nav flex-grow-1">
-
-                        <li class="nav-item">
-
-                            <a class="nav-link text-dark"
-                               asp-controller="Kerdes"
-                               asp-action="Index">
-
-                                Kérdések
-
-                            </a>
-
-                        </li>
-
-                        <li class="nav-item">
-
-                            <a class="nav-link text-dark"
-                               asp-controller="Kerdes"
-                               asp-action="Letrehozas">
-
-                                Új kérdés
-
-                            </a>
-
-                        </li>
-
-                        <li class="nav-item">
-
-                            <a class="nav-link text-dark"
-                               asp-controller="Admin"
-                               asp-action="Index">
-
-                                Admin
-
-                            </a>
-
-                        </li>
-
-                    </ul>
+                    <i class="bi bi-person"></i>
+                    admin
 
                 </div>
 
             </div>
 
-        </nav>
+        </div>
 
     </header>
 
 
-    <div class="container">
+    <main class="container mt-4">
 
-        <main role="main" class="pb-3">
+        @RenderBody()
 
-            @RenderBody()
-
-        </main>
-
-    </div>
+    </main>
 
 
-    <footer class="border-top footer text-muted">
+    <footer class="footer-modern mt-5">
 
-        <div class="container">
+        <div class="container text-center">
 
-            &copy; 2026 - KertKerdes
+            © 2026 Kertészeti Közösség
 
         </div>
 
     </footer>
 
 
-    <script src="~/lib/jquery/dist/jquery.min.js"></script>
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
-    <script src="~/js/site.js" asp-append-version="true"></script>
 
     @await RenderSectionAsync("Scripts", required: false)
 
