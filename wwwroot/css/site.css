@@ -1,0 +1,65 @@
+body {
+    background-color: #f5f7f6;
+    font-family: 'Segoe UI', sans-serif;
+}
+
+.navbar {
+    background-color: white;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+}
+
+.navbar-brand {
+    font-weight: 700;
+    color: #1b7f5a !important;
+}
+
+.hero {
+    background: linear-gradient(135deg, #1b7f5a, #2fa36b);
+    color: white;
+    padding: 60px 40px;
+    border-radius: 16px;
+    margin-bottom: 30px;
+}
+
+    .hero h1 {
+        font-size: 42px;
+        font-weight: 700;
+    }
+
+    .hero p {
+        font-size: 18px;
+        opacity: 0.95;
+    }
+
+.kereso {
+    max-width: 600px;
+}
+
+.question-card {
+    border: none;
+    border-radius: 14px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.06);
+    margin-bottom: 20px;
+}
+
+.vote-box {
+    text-align: center;
+    min-width: 80px;
+}
+
+.vote-number {
+    font-size: 20px;
+    font-weight: 700;
+}
+
+.stat-box {
+    background: white;
+    border-radius: 14px;
+    padding: 20px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.06);
+}
+
+.answer-card {
+    border-left: 4px solid #1b7f5a;
+    border-radius: 10px;
+}

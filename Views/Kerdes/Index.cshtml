@@ -1,0 +1,108 @@
+﻿@model List<KertKerdes.Models.Kerdes>
+
+@{
+    ViewData["Title"] = "Kérdések";
+}
+
+<div class="hero">
+
+    <h1>KertKérdés</h1>
+
+    <p>
+        Kérdezz, válaszolj, és oszd meg kertészeti tapasztalataidat.
+    </p>
+
+    <form method="get" class="kereso mt-4">
+
+        <input name="kereses"
+               class="form-control form-control-lg"
+               placeholder="Keresés kérdések között..." />
+
+    </form>
+
+</div>
+
+
+<div class="row">
+
+    <div class="col-md-8">
+
+        @foreach (var kerdes in Model)
+        {
+            <div class="card question-card">
+
+                <div class="card-body">
+
+                    <div class="row">
+
+                        <div class="col-2 vote-box">
+
+                            <a href="/Szavazat/KerdesFel/@kerdes.Id"
+                               class="btn btn-success btn-sm">+</a>
+
+                            <div class="vote-number mt-2 mb-2">
+                                @kerdes.Szavazat
+                            </div>
+
+                            <a href="/Szavazat/KerdesLe/@kerdes.Id"
+                               class="btn btn-danger btn-sm">-</a>
+
+                        </div>
+
+                        <div class="col-10">
+
+                            <h5>
+
+                                <a href="/Kerdes/Reszletek/@kerdes.Id"
+                                   class="text-decoration-none">
+
+                                    @kerdes.Cim
+
+                                </a>
+
+                            </h5>
+
+                            <p>@kerdes.Leiras</p>
+
+                            <small class="text-muted">
+                                Témakör: @kerdes.Temakor
+                            </small>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+        }
+
+        <a href="/Kerdes/Letrehozas"
+           class="btn btn-success mt-3">
+
+            Új kérdés feltevése
+
+        </a>
+
+    </div>
+
+
+    <div class="col-md-4">
+
+        <div class="stat-box">
+
+            <h5>Statisztika</h5>
+
+            <p>
+                Jóváhagyott kérdések: <strong>@ViewBag.KerdesDb</strong>
+            </p>
+
+            <p>
+                Jóváhagyott válaszok: <strong>@ViewBag.ValaszDb</strong>
+            </p>
+
+        </div>
+
+    </div>
+
+</div>

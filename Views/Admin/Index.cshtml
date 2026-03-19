@@ -1,0 +1,79 @@
+﻿@model KertKerdes.Models.AdminViewModel
+
+@{
+    ViewData["Title"] = "Admin";
+}
+
+<h2>Moderátor felület</h2>
+
+<h3>Jóváhagyásra váró kérdések</h3>
+
+<table class="table">
+
+    <tr>
+        <th>Cím</th>
+        <th>Művelet</th>
+    </tr>
+
+    @foreach (var kerdes in Model.VarakozoKerdesek)
+    {
+        <tr>
+            <td>@kerdes.Cim</td>
+            <td>
+
+                <a href="/Admin/KerdesJovahagy/@kerdes.Id"
+                   class="btn btn-success btn-sm">
+
+                    Jóváhagyás
+
+                </a>
+
+                <a href="/Admin/KerdesTorles/@kerdes.Id"
+                   class="btn btn-danger btn-sm">
+
+                    Törlés
+
+                </a>
+
+            </td>
+        </tr>
+    }
+
+</table>
+
+<hr />
+
+<h3>Jóváhagyásra váró válaszok</h3>
+
+<table class="table">
+
+    <tr>
+        <th>Válasz</th>
+        <th>Művelet</th>
+    </tr>
+
+    @foreach (var valasz in Model.VarakozoValaszok)
+    {
+        <tr>
+            <td>@valasz.Szoveg</td>
+            <td>
+
+                <a href="/Admin/ValaszJovahagy/@valasz.Id"
+                   class="btn btn-success btn-sm">
+
+                    Jóváhagyás
+
+                </a>
+
+                <a href="/Admin/ValaszTorles/@valasz.Id"
+                   class="btn btn-danger btn-sm">
+
+                    Törlés
+
+                </a>
+
+            </td>
+        </tr>
+    }
+
+</table>

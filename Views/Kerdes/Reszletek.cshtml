@@ -1,0 +1,107 @@
+﻿@model KertKerdes.Models.Kerdes
+
+@{
+    ViewData["Title"] = "Kérdés részletei";
+}
+
+<div class="card question-card mb-4">
+
+    <div class="card-body">
+
+        <h2>@Model.Cim</h2>
+
+        <p>@Model.Leiras</p>
+
+        <small class="text-muted">
+            Témakör: @Model.Temakor
+        </small>
+
+    </div>
+
+</div>
+
+
+<h4>Válaszok</h4>
+
+@foreach (var valasz in Model.Valaszok.Where(v => v.Jovahagyva))
+{
+    <div class="card answer-card mb-3">
+
+        <div class="card-body">
+
+            <div class="row">
+
+                <div class="col-2 vote-box">
+
+                    <a href="/Szavazat/ValaszFel/@valasz.Id"
+                       class="btn btn-success btn-sm">
+
+                        +
+
+                    </a>
+
+                    <div class="vote-number mt-2 mb-2">
+                        @valasz.Szavazat
+                    </div>
+
+                    <a href="/Szavazat/ValaszLe/@valasz.Id"
+                       class="btn btn-danger btn-sm">
+
+                        -
+
+                    </a>
+
+                </div>
+
+                <div class="col-10">
+
+                    <p>@valasz.Szoveg</p>
+
+                    @if (valasz.Elfogadott)
+                    {
+                        <span class="badge bg-success">
+                            Elfogadott válasz
+                        </span>
+                    }
+                    else
+                    {
+                        <a href="/Valasz/Elfogad/@valasz.Id"
+                           class="btn btn-outline-success btn-sm">
+
+                            Elfogadottá teszem
+
+                        </a>
+                    }
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+}
+
+<hr />
+
+<h4>Válasz beküldése</h4>
+
+<form method="post"
+      action="/Valasz/Letrehozas">
+
+    <input type="hidden"
+           name="KerdesId"
+           value="@Model.Id" />
+
+    <textarea name="Szoveg"
+              class="form-control mb-3"
+              rows="4"></textarea>
+
+    <button type="submit"
+            class="btn btn-primary">
+
+        Válasz küldése
+
+    </button>
+
+</form>
