@@ -1,6 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
+﻿using System.ComponentModel.DataAnnotations;
 
 namespace KertKerdes.Models
 {
@@ -9,21 +7,23 @@ namespace KertKerdes.Models
         public int Id { get; set; }
 
         [Required]
-        public string Cim { get; set; }
+        public string Cim { get; set; } = string.Empty;
 
         [Required]
-        public string Leiras { get; set; }
+        public string Leiras { get; set; } = string.Empty;
 
-        public string Temakor { get; set; }
+        public int FelhasznaloId { get; set; }
 
-        public string Szerzo { get; set; }
+        public int TemakorId { get; set; }
 
-        public DateTime Datum { get; set; } = DateTime.Now;
+        public DateTime Datum { get; set; }
 
-        public bool Jovahagyva { get; set; } = false;
+        public bool Jovahagyva { get; set; }
 
-        public int Szavazat { get; set; } = 0;
+        public int Szavazat { get; set; }
 
         public List<Valasz> Valaszok { get; set; } = new();
+
+        public List<KerdesCimke> KerdesCimkek { get; set; } = new();
     }
 }

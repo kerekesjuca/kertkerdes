@@ -4,7 +4,6 @@
     ViewData["Title"] = "Új kérdés feltevése";
 }
 
-<link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
 <div class="card question-card">
 
     <div class="card-body p-4">
@@ -27,7 +26,7 @@
 
                 </label>
 
-                <input name="Cim"
+                <input asp-for="Cim"
                        class="form-control form-control-lg" />
 
             </div>
@@ -42,7 +41,7 @@
 
                 </label>
 
-                <textarea name="Leiras"
+                <textarea asp-for="Leiras"
                           class="form-control"
                           rows="5"></textarea>
 
@@ -58,8 +57,47 @@
 
                 </label>
 
-                <input name="Temakor"
-                       class="form-control" />
+                <select asp-for="TemakorId"
+                        class="form-select">
+
+                    @foreach (var temakor in ViewBag.Temakorok)
+                    {
+                        <option value="@temakor.Id">
+
+                            @temakor.Nev
+
+                        </option>
+                    }
+
+                </select>
+
+            </div>
+
+
+            <div class="mb-4">
+
+                <label class="form-label">
+
+                    <i class="bi bi-tags"></i>
+                    Címkék
+
+                </label>
+
+                <select name="kivalasztottCimkek"
+                        class="form-select"
+                        multiple
+                        size="5">
+
+                    @foreach (var cimke in ViewBag.Cimkek)
+                    {
+                        <option value="@cimke.Id">
+
+                            @cimke.Nev
+
+                        </option>
+                    }
+
+                </select>
 
             </div>
 

@@ -6,20 +6,20 @@ namespace KertKerdes.Models
     {
         public int Id { get; set; }
 
-        public string Szoveg { get; set; }
+        public int KerdesId { get; set; }
 
-        public string Szerzo { get; set; }
+        public int FelhasznaloId { get; set; }
+
+        public string Szoveg { get; set; } = string.Empty;
 
         public DateTime Datum { get; set; } = DateTime.Now;
 
-        public bool Jovahagyva { get; set; } = false;
+        public bool Jovahagyva { get; set; }
 
-        public bool Elfogadott { get; set; } = false;
+        public bool Elfogadott { get; set; }
 
-        public int Szavazat { get; set; } = 0;
+        public int Szavazat { get; set; }
 
-        public int KerdesId { get; set; }
-
-        public Kerdes Kerdes { get; set; }
+        public Kerdes? Kerdes { get; set; }
     }
 }

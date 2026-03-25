@@ -4,181 +4,61 @@
     ViewData["Title"] = "Kérdés részletei";
 }
 
-<a href="/Kerdes/Index"
-   class="text-decoration-none text-muted mb-4 d-inline-block">
+<div class="question-card">
 
-    <i class="bi bi-arrow-left"></i>
-    Vissza a kérdésekhez
+    <h2>@Model.Cim</h2>
 
-</a>
+    <p>@Model.Leiras</p>
 
-
-<div class="card question-card mb-4">
-
-    <div class="card-body p-4">
-
-        <div class="row">
-
-            <div class="col-2 vote-box">
-
-                <a href="/Szavazat/KerdesFel/@Model.Id"
-                   class="btn btn-success btn-sm">
-
-                    <i class="bi bi-arrow-up"></i>
-
-                </a>
-
-                <div class="vote-number mt-2 mb-2">
-                    @Model.Szavazat
-                </div>
-
-                <a href="/Szavazat/KerdesLe/@Model.Id"
-                   class="btn btn-danger btn-sm">
-
-                    <i class="bi bi-arrow-down"></i>
-
-                </a>
-
-            </div>
-
-            <div class="col-10">
-
-                <h2>@Model.Cim</h2>
-
-                <p>@Model.Leiras</p>
-
-                <small class="text-muted">
-
-                    <i class="bi bi-tag"></i>
-                    @Model.Temakor
-
-                </small>
-
-            </div>
-
-        </div>
-
-    </div>
+    <small>@Model.Datum.ToShortDateString()</small>
 
 </div>
 
 
-<h4 class="mb-3">
+<h4 class="mt-4">
 
-    <i class="bi bi-chat-left-text"></i>
-    @Model.Valaszok.Count(v => v.Jovahagyva) válasz
+    Válaszok
 
 </h4>
 
 
-@if (Model.Valaszok.Any(v => v.Jovahagyva))
+@foreach (var valasz in Model.Valaszok.Where(v => v.Jovahagyva))
 {
-    @foreach (var valasz in Model.Valaszok.Where(v => v.Jovahagyva))
-    {
-        <div class="card answer-card mb-3">
+    <div class="answer-card">
 
-            <div class="card-body p-4">
+        <div>
 
-                <div class="row">
-
-                    <div class="col-2 vote-box">
-
-                        <a href="/Szavazat/ValaszFel/@valasz.Id"
-                           class="btn btn-success btn-sm">
-
-                            <i class="bi bi-arrow-up"></i>
-
-                        </a>
-
-                        <div class="vote-number mt-2 mb-2">
-                            @valasz.Szavazat
-                        </div>
-
-                        <a href="/Szavazat/ValaszLe/@valasz.Id"
-                           class="btn btn-danger btn-sm">
-
-                            <i class="bi bi-arrow-down"></i>
-
-                        </a>
-
-                    </div>
-
-                    <div class="col-10">
-
-                        <p>@valasz.Szoveg</p>
-
-                        @if (valasz.Elfogadott)
-                        {
-                            <span class="badge bg-success">
-
-                                <i class="bi bi-check-circle"></i>
-                                Elfogadott válasz
-
-                            </span>
-                        }
-
-                    </div>
-
-                </div>
-
-            </div>
+            @valasz.Szoveg
 
         </div>
-    }
-}
-else
-{
-    <div class="card answer-card mb-4">
 
-        <div class="card-body text-center text-muted p-5">
+        <small>
 
-            <i class="bi bi-chat display-4"></i>
+            @valasz.Datum.ToShortDateString()
 
-            <p class="mt-3">
-
-                Még nincs válasz. Légy te az első!
-
-            </p>
-
-        </div>
+        </small>
 
     </div>
 }
 
 
-<div class="card question-card">
+<form method="post"
+      action="/Valasz/Letrehozas"
+      class="mt-4">
 
-    <div class="card-body p-4">
+    <input type="hidden"
+           name="KerdesId"
+           value="@Model.Id" />
 
-        <h4 class="mb-3">
+    <textarea name="Szoveg"
+              class="form-control"
+              rows="4"></textarea>
 
-            <i class="bi bi-pencil-square"></i>
-            Válaszolj a kérdésre
+    <button type="submit"
+            class="btn btn-success mt-3">
 
-        </h4>
+        Válasz beküldése
 
-        <form method="post"
-              action="/Valasz/Letrehozas">
+    </button>
 
-            <input type="hidden"
-                   name="KerdesId"
-                   value="@Model.Id" />
-
-            <textarea name="Szoveg"
-                      class="form-control mb-3"
-                      rows="5"
-                      placeholder="Írd le a válaszod részletesen..."></textarea>
-
-            <button type="submit"
-                    class="btn btn-success">
-
-                <i class="bi bi-send"></i>
-                Válasz beküldése
-
-            </button>
-
-        </form>
-
-    </div>
-
-</div>
+</form>

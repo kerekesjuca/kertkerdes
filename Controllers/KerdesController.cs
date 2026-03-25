@@ -1,7 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using KertKerdes.Data;
-using System.Linq;
+using KertKerdes.Models;
 
 namespace KertKerdes.Controllers
 {
@@ -21,35 +21,66 @@ namespace KertKerdes.Controllers
                 .Where(k => k.Jovahagyva);
 
             if (!string.IsNullOrEmpty(kereses))
-                kerdesek = kerdesek.Where(k => k.Cim.Contains(kereses));
+            {
+                kerdesek = kerdesek.Where(k =>
+                    k.Cim.Contains(kereses) ||
+                    k.Leiras.Contains(kereses));
+            }
 
             ViewBag.KerdesDb = _context.Kerdesek.Count(k => k.Jovahagyva);
             ViewBag.ValaszDb = _context.Valaszok.Count(v => v.Jovahagyva);
 
+            ViewBag.Temakorok = _context.Temakorok.ToList();
+
             return View(kerdesek.ToList());
+        }
+
+        public IActionResult Letrehozas()
+        {
+            ViewBag.Temakorok = _context.Temakorok.ToList();
+
+            ViewBag.Cimkek = _context.Cimkek.ToList();
+
+            return View();
+        }
+
+        [HttpPost]
+        public IActionResult Letrehozas(Kerdes kerdes, List<int> kivalasztottCimkek)
+        {
+            kerdes.Jovahagyva = false;
+            kerdes.Szavazat = 0;
+            kerdes.FelhasznaloId = 1;
+            kerdes.Datum = DateTime.Now;
+
+            _context.Kerdesek.Add(kerdes);
+            _context.SaveChanges();
+
+            foreach (var cimkeId in kivalasztottCimkek)
+            {
+                _context.KerdesCimkek.Add(new KerdesCimke
+                {
+                    KerdesId = kerdes.Id,
+                    CimkeId = cimkeId
+                });
+            }
+
+            _context.SaveChanges();
+
+            return RedirectToAction("Index");
         }
 
         public IActionResult Reszletek(int id)
         {
-            var k = _context.Kerdesek
-                .Include(x => x.Valaszok)
-                .FirstOrDefault(x => x.Id == id);
+            var kerdes = _context.Kerdesek
+                .Include(k => k.Valaszok)
+                .FirstOrDefault(k => k.Id == id);
 
-            return View(k);
-        }
+            if (kerdes == null)
+            {
+                return NotFound();
+            }
 
-        public IActionResult Letrehozas() => View();
-
-        [HttpPost]
-        public IActionResult Letrehozas(Models.Kerdes k)
-        {
-            k.Szerzo = "felhasznalo";
-            k.Jovahagyva = false;
-
-            _context.Kerdesek.Add(k);
-            _context.SaveChanges();
-
-            return RedirectToAction("Index");
+            return View(kerdes);
         }
     }
 }

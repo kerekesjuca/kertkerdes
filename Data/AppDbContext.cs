@@ -1,6 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore;
-using KertKerdes.Models;
-using System.Collections.Generic;
+﻿using KertKerdes.Models;
+using Microsoft.EntityFrameworkCore;
 
 namespace KertKerdes.Data
 {
@@ -12,15 +11,17 @@ namespace KertKerdes.Data
         }
 
         public DbSet<Kerdes> Kerdesek { get; set; }
+
         public DbSet<Valasz> Valaszok { get; set; }
 
-        protected override void OnModelCreating(ModelBuilder modelBuilder)
-        {
-            modelBuilder.Entity<Valasz>()
-                .HasOne(v => v.Kerdes)
-                .WithMany(k => k.Valaszok)
-                .HasForeignKey(v => v.KerdesId)
-                .OnDelete(DeleteBehavior.Cascade);
-        }
+        public DbSet<Felhasznalo> Felhasznalok { get; set; }
+
+        public DbSet<Temakor> Temakorok { get; set; }
+
+        public DbSet<Cimke> Cimkek { get; set; }
+
+        public DbSet<KerdesCimke> KerdesCimkek { get; set; }
+
+        public DbSet<Szavazat> Szavazatok { get; set; }
     }
 }

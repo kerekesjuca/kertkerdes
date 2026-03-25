@@ -1,10 +1,9 @@
-﻿using System.Collections.Generic;
-
-namespace KertKerdes.Models
+﻿namespace KertKerdes.Models
 {
     public class AdminViewModel
     {
-        public List<Kerdes> VarakozoKerdesek { get; set; }
-        public List<Valasz> VarakozoValaszok { get; set; }
+        public List<Kerdes> VarakozoKerdesek { get; set; } = new();
+
+        public List<Valasz> VarakozoValaszok { get; set; } = new();
     }
 }

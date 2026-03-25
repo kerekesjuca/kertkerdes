@@ -1,24 +1,19 @@
 using KertKerdes.Data;
 using Microsoft.EntityFrameworkCore;
+using System;
 
 var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddControllersWithViews();
 
-
-// IDEIGLENES: InMemory adatbázis a stabil futtatáshoz
 builder.Services.AddDbContext<AppDbContext>(options =>
-    options.UseInMemoryDatabase("KertDb"));
-
-
-// KÉSÕBB MSSQL-hez ezt kell visszakapcsolni:
-// builder.Services.AddDbContext<AppDbContext>(options =>
-//     options.UseSqlServer(
-//         builder.Configuration.GetConnectionString("DefaultConnection")));
+    options.UseSqlServer(
+        builder.Configuration.GetConnectionString("DefaultConnection")));
 
 var app = builder.Build();
 
 app.UseHttpsRedirection();
+
 app.UseStaticFiles();
 
 app.UseRouting();

@@ -4,104 +4,61 @@
     ViewData["Title"] = "Kertészeti Közösség";
 }
 
-<div class="hero">
+<div class="hero-section">
 
     <h1>Kertészeti Közösség</h1>
 
-    <p>
-        Kérdezz, válaszolj, és oszd meg tudásod a kertészet szerelmeseivel!
-    </p>
+    <p>Kérdezz, válaszolj, és oszd meg tudásod a kertészet szerelmeseivel!</p>
 
-    <div class="d-flex gap-3 mt-4">
-
-        <form method="get" class="flex-grow-1">
-
-            <input name="kereses"
-                   class="form-control form-control-lg"
-                   placeholder="Keresés kérdésekben..." />
-
-        </form>
-
-        <a href="/Kerdes/Letrehozas"
-           class="btn btn-light btn-lg">
-
-            <i class="bi bi-plus"></i>
-            Kérdés feltevése
-
-        </a>
-
-    </div>
+    <form method="get" class="search-box">
+        <input name="kereses" placeholder="Keresés kérdésekben..." />
+    </form>
 
 </div>
 
+<div class="main-grid">
 
-<div class="row">
+    <div class="content-left">
 
-    <div class="col-md-8">
+        <div class="temakor-sor">
 
-        <h5 class="mb-3">
+            <span class="temakor-badge active">Összes</span>
 
-            <i class="bi bi-funnel"></i>
-            Szűrés témakör szerint
+            @foreach (var temakor in ViewBag.Temakorok)
+            {
+                <span class="temakor-badge">
+                    @temakor.Nev
+                </span>
+            }
 
-        </h5>
+        </div>
 
         @foreach (var kerdes in Model)
         {
-            <div class="card question-card">
+            <div class="question-card-modern">
 
-                <div class="card-body">
+                <div class="vote-box">
 
-                    <div class="row">
+                    <a href="/Szavazat/KerdesFel/@kerdes.Id">▲</a>
 
-                        <div class="col-2 vote-box">
+                    <strong>@kerdes.Szavazat</strong>
 
-                            <a href="/Szavazat/KerdesFel/@kerdes.Id"
-                               class="btn btn-success btn-sm">
+                    <a href="/Szavazat/KerdesLe/@kerdes.Id">▼</a>
 
-                                <i class="bi bi-arrow-up"></i>
+                </div>
 
-                            </a>
+                <div class="question-body">
 
-                            <div class="vote-number mt-2 mb-2">
+                    <h4>
+                        <a href="/Kerdes/Reszletek/@kerdes.Id">
+                            @kerdes.Cim
+                        </a>
+                    </h4>
 
-                                @kerdes.Szavazat
+                    <p>@kerdes.Leiras</p>
 
-                            </div>
-
-                            <a href="/Szavazat/KerdesLe/@kerdes.Id"
-                               class="btn btn-danger btn-sm">
-
-                                <i class="bi bi-arrow-down"></i>
-
-                            </a>
-
-                        </div>
-
-                        <div class="col-10">
-
-                            <h5>
-
-                                <a href="/Kerdes/Reszletek/@kerdes.Id"
-                                   class="text-decoration-none">
-
-                                    @kerdes.Cim
-
-                                </a>
-
-                            </h5>
-
-                            <p>@kerdes.Leiras</p>
-
-                            <small class="text-muted">
-
-                                <i class="bi bi-tag"></i>
-                                @kerdes.Temakor
-
-                            </small>
-
-                        </div>
-
+                    <div class="question-footer">
+                        <span>@kerdes.Datum.ToString("yyyy. MM. dd.")</span>
                     </div>
 
                 </div>
@@ -109,27 +66,42 @@
             </div>
         }
 
+        <a href="/Kerdes/Letrehozas" class="btn-modern-green">
+            Új kérdés feltevése
+        </a>
+
     </div>
 
+    <div class="content-right">
 
-    <div class="col-md-4">
+        <div class="side-card">
 
-        <div class="stat-box">
+            <h5>Népszerű címkék</h5>
 
-            <h5>
+            <div class="tag-list">
 
-                <i class="bi bi-bar-chart"></i>
-                Közösségi statisztika
+                <span>#komposzt</span>
+                <span>#öntözés</span>
+                <span>#palánta</span>
+                <span>#bio</span>
 
-            </h5>
+            </div>
 
-            <p>
-                <strong>@ViewBag.KerdesDb</strong> kérdés
-            </p>
+        </div>
 
-            <p>
-                <strong>@ViewBag.ValaszDb</strong> válasz
-            </p>
+        <div class="side-card green-card">
+
+            <h5>Közösségi statisztika</h5>
+
+            <div class="stat-big">
+                <div>@ViewBag.KerdesDb</div>
+                <span>Kérdés</span>
+            </div>
+
+            <div class="stat-big">
+                <div>@ViewBag.ValaszDb</div>
+                <span>Válasz</span>
+            </div>
 
         </div>
 

@@ -1,7 +1,8 @@
-﻿using Microsoft.AspNetCore.Mvc;
-using System.Linq;
-using KertKerdes.Data;
+﻿using KertKerdes.Data;
 using KertKerdes.Models;
+using Microsoft.AspNetCore.Mvc;
+using System;
+using System.Linq;
 
 namespace KertKerdes.Controllers
 {
@@ -18,8 +19,13 @@ namespace KertKerdes.Controllers
         {
             var model = new AdminViewModel
             {
-                VarakozoKerdesek = _context.Kerdesek.Where(x => !x.Jovahagyva).ToList(),
-                VarakozoValaszok = _context.Valaszok.Where(x => !x.Jovahagyva).ToList()
+                VarakozoKerdesek = _context.Kerdesek
+                    .Where(k => !k.Jovahagyva)
+                    .ToList(),
+
+                VarakozoValaszok = _context.Valaszok
+                    .Where(v => !v.Jovahagyva)
+                    .ToList()
             };
 
             return View(model);
@@ -27,33 +33,59 @@ namespace KertKerdes.Controllers
 
         public IActionResult KerdesJovahagy(int id)
         {
-            var k = _context.Kerdesek.Find(id);
-            k.Jovahagyva = true;
+            var kerdes = _context.Kerdesek.FirstOrDefault(k => k.Id == id);
+
+            if (kerdes == null)
+            {
+                return NotFound();
+            }
+
+            kerdes.Jovahagyva = true;
+
             _context.SaveChanges();
+
             return RedirectToAction("Index");
         }
 
         public IActionResult KerdesTorles(int id)
         {
-            var k = _context.Kerdesek.Find(id);
-            _context.Kerdesek.Remove(k);
-            _context.SaveChanges();
+            var kerdes = _context.Kerdesek.FirstOrDefault(k => k.Id == id);
+
+            if (kerdes != null)
+            {
+                _context.Kerdesek.Remove(kerdes);
+                _context.SaveChanges();
+            }
+
             return RedirectToAction("Index");
         }
 
         public IActionResult ValaszJovahagy(int id)
         {
-            var v = _context.Valaszok.Find(id);
-            v.Jovahagyva = true;
+            var valasz = _context.Valaszok.FirstOrDefault(v => v.Id == id);
+
+            if (valasz == null)
+            {
+                return NotFound();
+            }
+
+            valasz.Jovahagyva = true;
+
             _context.SaveChanges();
+
             return RedirectToAction("Index");
         }
 
         public IActionResult ValaszTorles(int id)
         {
-            var v = _context.Valaszok.Find(id);
-            _context.Valaszok.Remove(v);
-            _context.SaveChanges();
+            var valasz = _context.Valaszok.FirstOrDefault(v => v.Id == id);
+
+            if (valasz != null)
+            {
+                _context.Valaszok.Remove(valasz);
+                _context.SaveChanges();
+            }
+
             return RedirectToAction("Index");
         }
     }
