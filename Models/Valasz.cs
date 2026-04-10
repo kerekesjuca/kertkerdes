@@ -21,5 +21,7 @@ namespace KertKerdes.Models
         public int Szavazat { get; set; }
 
         public Kerdes? Kerdes { get; set; }
+
+        public Felhasznalo? Felhasznalo { get; set; }
     }
 }

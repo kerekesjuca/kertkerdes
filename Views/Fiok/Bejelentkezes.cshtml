@@ -1,0 +1,87 @@
+﻿@model KertKerdes.Models.BejelentkezesViewModel
+
+@{
+    ViewData["Title"] = "Bejelentkezés";
+}
+
+<div class="modern-form-card">
+
+    <h2>Bejelentkezés</h2>
+
+    <p class="text-muted mb-4">
+        Jelentkezz be a közösségi felület használatához
+    </p>
+
+    @if (ViewBag.Hiba != null)
+    {
+        <div class="alert alert-danger">
+            @ViewBag.Hiba
+        </div>
+    }
+
+    <form method="post" id="belepes-form">
+
+        <input asp-for="Email"
+               class="form-control mb-3"
+               placeholder="Email cím" />
+
+        <input asp-for="Jelszo"
+               type="password"
+               class="form-control mb-3"
+               placeholder="Jelszó" />
+
+        <button type="submit"
+                class="btn-modern-green">
+            Bejelentkezés
+        </button>
+
+    </form>
+
+</div>
+
+@if (TempData["BelepesSzukseges"] != null)
+{
+    <div id="belepesModal"
+         class="modal fade show"
+         style="display:block; background:rgba(0,0,0,0.45);"
+         tabindex="-1">
+
+        <div class="modal-dialog modal-dialog-centered">
+
+            <div class="modal-content border-0 rounded-4 shadow">
+
+                <div class="modal-body text-center p-4">
+
+                    <div class="mb-3 fs-1 text-warning">
+                        <i class="bi bi-lock-fill"></i>
+                    </div>
+
+                    <h4>Bejelentkezés szükséges</h4>
+
+                    <p class="text-muted mt-3">
+                        Bejelentkezés után működik a funkció.
+                    </p>
+
+                    <div class="d-flex justify-content-center gap-3 mt-4">
+
+                        <button type="button"
+                                class="btn btn-success rounded-pill px-4"
+                                onclick="document.getElementById('belepesModal').style.display='none';">
+                            Belépés
+                        </button>
+
+                        <a href="/Kerdes"
+                           class="btn btn-outline-secondary rounded-pill px-4">
+                            Vissza a főoldalra
+                        </a>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+}

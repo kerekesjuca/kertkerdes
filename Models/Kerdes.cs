@@ -1,4 +1,6 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using System;
+using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 
 namespace KertKerdes.Models
 {
@@ -14,7 +16,11 @@ namespace KertKerdes.Models
 
         public int FelhasznaloId { get; set; }
 
+        public Felhasznalo? Felhasznalo { get; set; }
+
         public int TemakorId { get; set; }
+
+        public Temakor? Temakor { get; set; }
 
         public DateTime Datum { get; set; }
 

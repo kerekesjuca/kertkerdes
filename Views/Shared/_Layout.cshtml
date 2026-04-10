@@ -1,4 +1,6 @@
-﻿<!DOCTYPE html>
+﻿@using Microsoft.AspNetCore.Http
+
+<!DOCTYPE html>
 <html lang="hu">
 <head>
     <meta charset="utf-8" />
@@ -14,6 +16,11 @@
     <link rel="stylesheet"
           href="~/css/site.css"
           asp-append-version="true" />
+
+    <link rel="stylesheet" href="~/css/kerdes.css" />
+
+    <link rel="stylesheet" href="~/css/admin.css" />
+
 </head>
 
 <body>
@@ -27,33 +34,63 @@
                class="logo-box text-decoration-none">
 
                 <div class="logo-icon">
-
                     <i class="bi bi-flower1"></i>
-
                 </div>
 
                 <span>Kertészeti Közösség</span>
 
             </a>
 
-
             <div class="d-flex gap-3 align-items-center">
 
-                <a asp-controller="Admin"
-                   asp-action="Index"
-                   class="nav-modern-btn">
+                @if (Context.Session.GetString("Szerepkor") == "Admin"
+                                || Context.Session.GetString("Szerepkor") == "Moderator")
+                {
+                    <a asp-controller="Admin"
+                       asp-action="Index"
+                       class="nav-modern-btn">
 
-                    <i class="bi bi-shield"></i>
-                    Moderálás
+                        <i class="bi bi-shield"></i>
+                        Moderálás
 
-                </a>
+                    </a>
+                }
 
-                <div class="user-badge">
+                @if (Context.Session.GetString("FelhasznaloNev") == null)
+                {
+                    <a asp-controller="Fiok"
+                       asp-action="Bejelentkezes"
+                       class="nav-modern-btn">
 
-                    <i class="bi bi-person"></i>
-                    admin
+                        Bejelentkezés
 
-                </div>
+                    </a>
+
+                    <a asp-controller="Fiok"
+                       asp-action="Regisztracio"
+                       class="nav-modern-btn">
+
+                        Regisztráció
+
+                    </a>
+                }
+                else
+                {
+                    <div class="user-badge">
+
+                        <i class="bi bi-person"></i>
+                        @Context.Session.GetString("FelhasznaloNev")
+
+                    </div>
+
+                    <a asp-controller="Fiok"
+                       asp-action="Kijelentkezes"
+                       class="nav-modern-btn">
+
+                        Kijelentkezés
+
+                    </a>
+                }
 
             </div>
 
@@ -61,13 +98,11 @@
 
     </header>
 
-
     <main class="container mt-4">
 
         @RenderBody()
 
     </main>
-
 
     <footer class="footer-modern mt-5">
 
@@ -78,7 +113,6 @@
         </div>
 
     </footer>
-
 
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
 

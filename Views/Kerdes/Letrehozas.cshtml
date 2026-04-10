@@ -83,21 +83,14 @@
 
                 </label>
 
-                <select name="kivalasztottCimkek"
-                        class="form-select"
-                        multiple
-                        size="5">
+                <input type="text"
+                       name="ujCimkek"
+                       class="form-control"
+                       placeholder="pl.: paradicsom, levéltetű, bio" />
 
-                    @foreach (var cimke in ViewBag.Cimkek)
-                    {
-                        <option value="@cimke.Id">
-
-                            @cimke.Nev
-
-                        </option>
-                    }
-
-                </select>
+                <small class="text-muted">
+                    Több címkét vesszővel válassz el.
+                </small>
 
             </div>
 

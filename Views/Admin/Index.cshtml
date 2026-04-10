@@ -4,130 +4,246 @@
     ViewData["Title"] = "Moderátori felület";
 }
 
-<div class="admin-header mb-4">
-
-    <h2>Moderátori felület</h2>
-
-    <p class="text-muted">
-        Beküldött kérdések és válaszok jóváhagyása
-    </p>
-
-</div>
-
-
-<div class="admin-tabs mb-4">
-
-    <span class="badge bg-success">
-        Várakozó kérdések @Model.VarakozoKerdesek.Count
-    </span>
-
-    <span class="badge bg-primary ms-2">
-        Adott válaszok @Model.VarakozoValaszok.Count
-    </span>
-
-</div>
-
-
-@if (Model.VarakozoKerdesek.Any())
+@if (TempData["AdminSiker"] != null)
 {
-    <h4>Kérdések</h4>
+    <div class="alert alert-success">
+        @TempData["AdminSiker"]
+    </div>
+}
 
-    @foreach (var kerdes in Model.VarakozoKerdesek)
-    {
-        <div class="card admin-card mb-3">
+@if (TempData["AdminHiba"] != null)
+{
+    <div class="alert alert-danger">
+        @TempData["AdminHiba"]
+    </div>
+}
 
-            <div class="card-body">
+<div class="admin-dashboard">
 
-                <div class="row align-items-center">
+    <div class="admin-header">
+        <h2><i class="bi bi-shield-check"></i> Moderátori felület</h2>
 
-                    <div class="col-md-8">
+        <p class="text-muted">
+            Beküldött kérdések, válaszok és moderátori kérelmek kezelése
+        </p>
+    </div>
 
-                        <h5>@kerdes.Cim</h5>
+    <div class="row mb-4">
 
-                        <p class="text-muted">
-                            @kerdes.Leiras
-                        </p>
+        <div class="col-md-4">
+            <div class="admin-card text-center">
+                <h3>@Model.VarakozoKerdesek.Count</h3>
+                <p>Várakozó kérdés</p>
+            </div>
+        </div>
 
-                        <span class="badge bg-light text-dark">
-                            @kerdes.TemakorId
-                        </span>
+        <div class="col-md-4">
+            <div class="admin-card text-center">
+                <h3>@Model.VarakozoValaszok.Count</h3>
+                <p>Várakozó válasz</p>
+            </div>
+        </div>
 
-                    </div>
+        <div class="col-md-4">
+            <div class="admin-card text-center">
+                <h3>@Model.VarakozoModeratorok.Count</h3>
+                <p>Moderátori kérelem</p>
+            </div>
+        </div>
 
-                    <div class="col-md-4 text-end">
+    </div>
 
-                        <a href="/Kerdes/Reszletek/@kerdes.Id"
-                           class="btn btn-outline-secondary btn-sm">
+    <div class="accordion" id="adminAccordion">
 
-                            Megtekintés
+        <div class="accordion-item">
 
-                        </a>
+            <h2 class="accordion-header">
+                <button class="accordion-button" data-bs-toggle="collapse" data-bs-target="#moderatorok">
+                    <i class="bi bi-person-check me-2"></i> Moderátori kérelmek
+                </button>
+            </h2>
 
-                        <a href="/Admin/KerdesJovahagy/@kerdes.Id"
-                           class="btn btn-success btn-sm">
+            <div id="moderatorok" class="accordion-collapse collapse show">
+                <div class="accordion-body">
 
-                            Jóváhagyás
+                    @if (Model.VarakozoModeratorok.Any())
+                    {
+                        @foreach (var felhasznalo in Model.VarakozoModeratorok)
+                        {
+                            <div class="admin-row">
 
-                        </a>
+                                <div>
+                                    <strong>@felhasznalo.Felhasznalonev</strong><br />
+                                    <small>@felhasznalo.Email</small><br />
 
-                        <a href="/Admin/KerdesTorles/@kerdes.Id"
-                           class="btn btn-danger btn-sm">
+                                    <span class="status-badge status-approved">
+                                        Moderátor kérés
+                                    </span>
+                                </div>
 
-                            Törlés
+                                <div>
+                                    @if (!felhasznalo.ModeratorJovahagyva && !felhasznalo.ModeratorElutasitva)
+                                    {
+                                        <a href="/Admin/ModeratorJovahagy/@felhasznalo.Id"
+                                           class="admin-action-btn admin-approve">
+                                            Jóváhagyás
+                                        </a>
 
-                        </a>
+                                        <a href="/Admin/ModeratorElutasit/@felhasznalo.Id"
+                                           class="admin-action-btn admin-delete">
+                                            Elutasítás
+                                        </a>
+                                    }
+                                </div>
 
-                    </div>
+                            </div>
+                        }
+                    }
+                    else
+                    {
+                        <div class="admin-empty">
+                            Nincs függő moderátori kérelem.
+                        </div>
+                    }
 
                 </div>
-
             </div>
 
         </div>
-    }
-}
 
+        <div class="accordion-item">
 
-@if (Model.VarakozoValaszok.Any())
-{
-    <h4 class="mt-5">Válaszok</h4>
+            <h2 class="accordion-header">
+                <button class="accordion-button collapsed" data-bs-toggle="collapse" data-bs-target="#kerdesek">
+                    <i class="bi bi-chat-left-text me-2"></i> Kérdések
+                </button>
+            </h2>
 
-    @foreach (var valasz in Model.VarakozoValaszok)
-    {
-        <div class="card admin-card mb-3">
+            <div id="kerdesek" class="accordion-collapse collapse">
+                <div class="accordion-body">
 
-            <div class="card-body">
+                    @if (Model.VarakozoKerdesek.Any())
+                    {
+                        @foreach (var kerdes in Model.VarakozoKerdesek)
+                        {
+                            <div class="admin-row">
 
-                <div class="row align-items-center">
+                                <div>
+                                    <strong>@kerdes.Cim</strong><br />
+                                    <small>@kerdes.Leiras</small><br />
 
-                    <div class="col-md-8">
+                                    <span class="status-badge status-waiting">
+                                        Jóváhagyásra vár
+                                    </span>
 
-                        <p>@valasz.Szoveg</p>
+                                    @if (kerdes.Felhasznalo != null)
+                                    {
+                                        <br />
+                                        <small class="text-muted">
+                                            @kerdes.Felhasznalo.Felhasznalonev · @kerdes.Datum.ToShortDateString()
+                                        </small>
+                                    }
+                                </div>
 
-                    </div>
+                                <div class="admin-actions">
+                                    <a href="/Kerdes/Reszletek/@kerdes.Id"
+                                       class="admin-action-btn">
+                                        Megtekintés
+                                    </a>
 
-                    <div class="col-md-4 text-end">
+                                    <a href="/Admin/KerdesJovahagy/@kerdes.Id"
+                                       class="admin-action-btn admin-approve">
+                                        Jóváhagyás
+                                    </a>
 
-                        <a href="/Admin/ValaszJovahagy/@valasz.Id"
-                           class="btn btn-success btn-sm">
-
-                            Jóváhagyás
-
-                        </a>
-
-                        <a href="/Admin/ValaszTorles/@valasz.Id"
-                           class="btn btn-danger btn-sm">
-
-                            Törlés
-
-                        </a>
-
-                    </div>
+                                    <a href="/Admin/KerdesTorles/@kerdes.Id"
+                                       class="admin-action-btn admin-delete">
+                                        Törlés
+                                    </a>
+                                </div>
+                            </div>
+                        }
+                    }
+                    else
+                    {
+                        <div class="admin-empty">
+                            Nincs várakozó kérdés.
+                        </div>
+                    }
 
                 </div>
-
             </div>
 
         </div>
-    }
-}
+
+        <div class="accordion-item">
+
+            <h2 class="accordion-header">
+                <button class="accordion-button collapsed" data-bs-toggle="collapse" data-bs-target="#valaszok">
+                    <i class="bi bi-reply me-2"></i> Válaszok
+                </button>
+            </h2>
+
+            <div id="valaszok" class="accordion-collapse collapse">
+                <div class="accordion-body">
+
+                    @if (Model.VarakozoValaszok.Any())
+                    {
+                        @foreach (var valasz in Model.VarakozoValaszok)
+                        {
+                            <div class="admin-row">
+
+                                <div>
+                                    <small>@valasz.Szoveg</small><br />
+
+                                    <span class="status-badge status-waiting">
+                                        Jóváhagyásra vár
+                                    </span>
+
+                                    @if (valasz.Kerdes != null)
+                                    {
+                                        <br />
+                                        <small class="text-muted">
+                                            Kérdés: @valasz.Kerdes.Cim
+                                        </small>
+                                    }
+
+                                    @if (valasz.Felhasznalo != null)
+                                    {
+                                        <br />
+                                        <small class="text-muted">
+                                            @valasz.Felhasznalo.Felhasznalonev · @valasz.Datum.ToShortDateString()
+                                        </small>
+                                    }
+                                </div>
+
+                                <div>
+                                    <a href="/Admin/ValaszJovahagy/@valasz.Id"
+                                       class="admin-action-btn admin-approve">
+                                        Jóváhagyás
+                                    </a>
+
+                                    <a href="/Admin/ValaszTorles/@valasz.Id"
+                                       class="admin-action-btn admin-delete">
+                                        Törlés
+                                    </a>
+                                </div>
+
+                            </div>
+                        }
+                    }
+                    else
+                    {
+                        <div class="admin-empty">
+                            Nincs várakozó válasz.
+                        </div>
+                    }
+
+                </div>
+            </div>
+
+        </div>
+
+    </div>
+
+</div>

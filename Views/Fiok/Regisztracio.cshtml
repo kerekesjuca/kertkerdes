@@ -1,0 +1,116 @@
+﻿@model KertKerdes.Models.RegisztracioViewModel
+
+@{
+    ViewData["Title"] = "Regisztráció";
+}
+
+<div class="modern-form-card">
+
+    <h2>Regisztráció</h2>
+
+    <form method="post">
+
+        <div asp-validation-summary="All" class="text-danger mb-3"></div>
+
+        <input asp-for="Felhasznalonev"
+               class="form-control mb-2"
+               placeholder="Felhasználónév" />
+        <span asp-validation-for="Felhasznalonev" class="text-danger"></span>
+
+        <input asp-for="Email"
+               class="form-control mb-2"
+               placeholder="Email" />
+        <span asp-validation-for="Email" class="text-danger"></span>
+
+        <input asp-for="Jelszo"
+               type="password"
+               class="form-control mb-2"
+               placeholder="Jelszó" />
+        <span asp-validation-for="Jelszo" class="text-danger"></span>
+
+        <input asp-for="JelszoUjra"
+               type="password"
+               class="form-control mb-2"
+               placeholder="Jelszó újra" />
+        <span asp-validation-for="JelszoUjra" class="text-danger"></span>
+
+        <select asp-for="Szerepkor" class="form-control mb-3">
+            <option value="Altalanos">Általános felhasználó</option>
+            <option value="Moderator">Moderátor</option>
+        </select>
+
+        <small class="text-muted">
+            A jelszó legalább 8 karakter legyen, tartalmazzon kis- és nagybetűt, számot és speciális karaktert.
+        </small>
+
+        <br /><br />
+
+        <button class="btn-modern-green" type="submit">
+            Regisztráció
+        </button>
+
+    </form>
+
+</div>
+
+@if (TempData["RegisztracioTipus"] != null)
+{
+    var tipus = TempData["RegisztracioTipus"]?.ToString();
+
+    <div id="regisztracioModal"
+         class="modal fade show"
+         style="display:block; background:rgba(0,0,0,0.45);"
+         tabindex="-1">
+
+        <div class="modal-dialog modal-dialog-centered">
+
+            <div class="modal-content border-0 rounded-4 shadow">
+
+                <div class="modal-body text-center p-4">
+
+                    <div class="mb-3 fs-1 text-success">
+                        <i class="bi bi-check-circle-fill"></i>
+                    </div>
+
+                    <h4>Sikeres regisztráció</h4>
+
+                    @if (tipus == "Moderator")
+                    {
+                        <p class="text-muted mt-3">
+                            Moderátori regisztráció esetén admin jóváhagyás után tudsz belépni.
+                        </p>
+                    }
+                    else
+                    {
+                        <p class="text-muted mt-3">
+                            A regisztráció sikeres volt, most már beléphetsz.
+                        </p>
+                    }
+
+                    <div class="d-flex justify-content-center gap-3 mt-4">
+
+                        <button type="button"
+                                class="btn btn-success rounded-pill px-4"
+                                onclick="document.getElementById('regisztracioModal').style.display='none';">
+                            Belépés
+                        </button>
+
+                        <a href="/Kerdes"
+                           class="btn btn-outline-secondary rounded-pill px-4">
+                            Vissza a főoldalra
+                        </a>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+}
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

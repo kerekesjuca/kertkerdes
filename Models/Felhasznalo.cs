@@ -1,5 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 
 namespace KertKerdes.Models
 {
@@ -7,18 +7,22 @@ namespace KertKerdes.Models
     {
         public int Id { get; set; }
 
-        public string Felhasznalonev { get; set; } = string.Empty;
+        [Required]
+        public string Felhasznalonev { get; set; } = "";
 
-        public string Email { get; set; } = string.Empty;
+        [Required]
+        public string Email { get; set; } = "";
 
-        public string JelszoHash { get; set; } = string.Empty;
+        [Required]
+        public string JelszoHash { get; set; } = "";
 
-        public string Szerepkor { get; set; } = "Felhasznalo";
+        [Required]
+        public string Szerepkor { get; set; } = "Altalanos";
+
+        public bool ModeratorJovahagyva { get; set; } = false;
+
+        public bool ModeratorElutasitva { get; set; } = false;
 
         public DateTime RegisztracioDatuma { get; set; } = DateTime.Now;
-
-        public List<Kerdes> Kerdesek { get; set; } = new();
-
-        public List<Valasz> Valaszok { get; set; } = new();
     }
 }

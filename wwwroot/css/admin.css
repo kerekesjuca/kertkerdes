@@ -1,0 +1,146 @@
+﻿.admin-dashboard .admin-header {
+    background: linear-gradient(135deg, #eef7f2, #f8fbf9);
+    border-radius: 18px;
+    padding: 28px;
+    margin-bottom: 28px;
+    box-shadow: 0 8px 20px rgba(0,0,0,0.05);
+}
+
+.admin-dashboard .admin-card {
+    background: white;
+    border-radius: 18px;
+    padding: 24px;
+    margin-bottom: 24px;
+    box-shadow: 0 8px 20px rgba(0,0,0,0.06);
+}
+
+    .admin-dashboard .admin-card h4 {
+        margin-bottom: 20px;
+        font-weight: 600;
+    }
+
+    .admin-dashboard .admin-card h3 {
+        font-size: 34px;
+        font-weight: 700;
+        color: #16a34a;
+    }
+
+    .admin-dashboard .admin-card p {
+        margin: 0;
+        color: #6b7280;
+    }
+
+.admin-dashboard .admin-table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+    .admin-dashboard .admin-table tr {
+        border-bottom: 1px solid #eef2f1;
+    }
+
+    .admin-dashboard .admin-table td {
+        padding: 14px 10px;
+        vertical-align: middle;
+    }
+
+.admin-dashboard .admin-action-btn {
+    display: inline-block;
+    padding: 8px 14px;
+    border-radius: 10px;
+    text-decoration: none;
+    font-size: 14px;
+    margin-right: 6px;
+    transition: 0.2s;
+}
+
+.admin-dashboard .admin-approve {
+    background: #34a853;
+    color: white;
+}
+
+.admin-dashboard .admin-delete {
+    background: #ef4444;
+    color: white;
+}
+
+.admin-dashboard .admin-action-btn:hover {
+    opacity: 0.9;
+}
+
+.admin-dashboard .admin-empty {
+    color: #6b7280;
+    padding: 16px 0;
+}
+
+.admin-dashboard .admin-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 16px 0;
+    border-bottom: 1px solid #eef2f1;
+}
+
+    .admin-dashboard .admin-row:last-child {
+        border-bottom: none;
+    }
+
+.admin-dashboard .accordion-item {
+    border: none;
+    margin-bottom: 16px;
+    border-radius: 16px;
+    overflow: hidden;
+    box-shadow: 0 8px 20px rgba(0,0,0,0.05);
+}
+
+.admin-dashboard .accordion-button {
+    background: white;
+    font-weight: 600;
+    box-shadow: none;
+}
+
+    .admin-dashboard .accordion-button:not(.collapsed) {
+        background: #eef7f2;
+        color: #1b7f5a;
+    }
+
+.admin-dashboard .accordion-body {
+    background: white;
+}
+
+.admin-dashboard .status-badge {
+    display: inline-block;
+    padding: 6px 12px;
+    border-radius: 10px;
+    font-size: 13px;
+    font-weight: 600;
+    margin-top: 8px;
+}
+
+.admin-dashboard .status-waiting {
+    background: #fef3c7;
+    color: #92400e;
+}
+
+.admin-dashboard .status-approved {
+    background: #dcfce7;
+    color: #166534;
+}
+
+.admin-dashboard .status-delete {
+    background: #fee2e2;
+    color: #991b1b;
+}
+
+.admin-actions {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    align-items: flex-end;
+}
+
+    .admin-actions a,
+    .admin-actions button {
+        min-width: 120px;
+        text-align: center;
+    }
