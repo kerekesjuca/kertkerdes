@@ -28,8 +28,8 @@ namespace KertKerdes.Models
 
         public int Szavazat { get; set; }
 
-        public List<Valasz> Valaszok { get; set; } = new();
+        public ICollection<Valasz> Valaszok { get; set; } = new List<Valasz>();
 
-        public List<KerdesCimke> KerdesCimkek { get; set; } = new();
+        public ICollection<KerdesCimke> KerdesCimkek { get; set; } = new List<KerdesCimke>();
     }
 }

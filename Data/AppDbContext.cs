@@ -28,7 +28,7 @@ namespace KertKerdes.Data
         {
             modelBuilder.Entity<Kerdes>()
                 .HasOne(k => k.Felhasznalo)
-                .WithMany()
+                .WithMany(f => f.Kerdesek)
                 .HasForeignKey(k => k.FelhasznaloId)
                 .OnDelete(DeleteBehavior.Restrict);
 
@@ -40,7 +40,7 @@ namespace KertKerdes.Data
 
             modelBuilder.Entity<Valasz>()
                 .HasOne(v => v.Felhasznalo)
-                .WithMany()
+                .WithMany(f => f.Valaszok)
                 .HasForeignKey(v => v.FelhasznaloId)
                 .OnDelete(DeleteBehavior.Restrict);
 
@@ -58,9 +58,27 @@ namespace KertKerdes.Data
 
             modelBuilder.Entity<KerdesCimke>()
                 .HasOne(kc => kc.Cimke)
-                .WithMany()
+                .WithMany(c => c.KerdesCimkek)
                 .HasForeignKey(kc => kc.CimkeId)
                 .OnDelete(DeleteBehavior.Cascade);
+
+            modelBuilder.Entity<Szavazat>()
+                .HasOne(s => s.Kerdes)
+                .WithMany()
+                .HasForeignKey(s => s.KerdesId)
+                .OnDelete(DeleteBehavior.Restrict);
+
+            modelBuilder.Entity<Szavazat>()
+                .HasOne(s => s.Valasz)
+                .WithMany()
+                .HasForeignKey(s => s.ValaszId)
+                .OnDelete(DeleteBehavior.Restrict);
+
+            modelBuilder.Entity<Szavazat>()
+                .HasOne(s => s.Felhasznalo)
+                .WithMany(f => f.Szavazatok)
+                .HasForeignKey(s => s.FelhasznaloId)
+                .OnDelete(DeleteBehavior.Restrict);
 
             modelBuilder.Entity<Szavazat>()
                 .HasIndex(s => new { s.FelhasznaloId, s.KerdesId })

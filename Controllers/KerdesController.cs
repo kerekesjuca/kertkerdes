@@ -3,8 +3,10 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Http;
 using KertKerdes.Data;
 using KertKerdes.Models;
+using KertKerdes.Helpers;
 using System;
 using System.Linq;
+using System.Collections.Generic;
 
 namespace KertKerdes.Controllers
 {
@@ -45,7 +47,7 @@ namespace KertKerdes.Controllers
                 kerdesek = kerdesek.Where(k =>
                     k.KerdesCimkek.Any(kc =>
                         kc.Cimke != null &&
-                        kc.Cimke.Nev == cimke));
+                        kc.Cimke.Nev.ToLower() == cimke.ToLower()));
             }
 
             ViewBag.KerdesDb = _context.Kerdesek.Count(k => k.Jovahagyva);
@@ -97,10 +99,49 @@ namespace KertKerdes.Controllers
                 return RedirectToAction("Bejelentkezes", "Fiok");
             }
 
-            if (string.IsNullOrWhiteSpace(kerdes.Cim) || string.IsNullOrWhiteSpace(kerdes.Leiras))
+            if (string.IsNullOrWhiteSpace(kerdes.Cim))
+            {
+                ModelState.AddModelError("Cim", "A kérdés címe kötelező.");
+            }
+
+            if (string.IsNullOrWhiteSpace(kerdes.Leiras))
+            {
+                ModelState.AddModelError("Leiras", "A kérdés leírása kötelező.");
+            }
+
+            if (CimkeModeraloHelper.TiltottCimke(kerdes.Cim))
+            {
+                ModelState.AddModelError("Cim", "A szöveg trágár kifejezést tartalmaz, módosítsd.");
+            }
+
+            if (CimkeModeraloHelper.TiltottCimke(kerdes.Leiras))
+            {
+                ModelState.AddModelError("Leiras", "A szöveg trágár kifejezést tartalmaz, módosítsd.");
+            }
+
+            List<string> egyediCimkek = new();
+
+            if (!string.IsNullOrWhiteSpace(ujCimkek))
+            {
+                egyediCimkek = ujCimkek
+                    .Split(',', StringSplitOptions.RemoveEmptyEntries)
+                    .Select(c => c.Trim().ToLower())
+                    .Distinct()
+                    .ToList();
+
+                foreach (var cimkeNev in egyediCimkek)
+                {
+                    if (CimkeModeraloHelper.TiltottCimke(cimkeNev))
+                    {
+                        ModelState.AddModelError("ujCimkek", "A szöveg trágár kifejezést tartalmaz, módosítsd.");
+                        break;
+                    }
+                }
+            }
+
+            if (!ModelState.IsValid)
             {
                 ViewBag.Temakorok = _context.Temakorok.ToList();
-                ModelState.AddModelError("", "A kérdés címe és leírása kötelező.");
                 return View(kerdes);
             }
 
@@ -110,47 +151,29 @@ namespace KertKerdes.Controllers
             kerdes.Datum = DateTime.Now;
 
             _context.Kerdesek.Add(kerdes);
-            _context.SaveChanges();
 
-            if (!string.IsNullOrWhiteSpace(ujCimkek))
+            foreach (var cimkeNev in egyediCimkek)
             {
-                var egyediCimkek = ujCimkek
-                    .Split(',', StringSplitOptions.RemoveEmptyEntries)
-                    .Select(c => c.Trim().ToLower())
-                    .Distinct()
-                    .ToList();
+                var letezoCimke = _context.Cimkek.FirstOrDefault(c => c.Nev.ToLower() == cimkeNev);
 
-                foreach (var cimkeNev in egyediCimkek)
+                if (letezoCimke == null)
                 {
-                    var letezoCimke = _context.Cimkek.FirstOrDefault(c => c.Nev.ToLower() == cimkeNev);
-
-                    if (letezoCimke == null)
+                    letezoCimke = new Cimke
                     {
-                        letezoCimke = new Cimke
-                        {
-                            Nev = cimkeNev
-                        };
+                        Nev = cimkeNev
+                    };
 
-                        _context.Cimkek.Add(letezoCimke);
-                        _context.SaveChanges();
-                    }
-
-                    var kapcsolatLetezik = _context.KerdesCimkek.Any(kc =>
-                        kc.KerdesId == kerdes.Id &&
-                        kc.CimkeId == letezoCimke.Id);
-
-                    if (!kapcsolatLetezik)
-                    {
-                        _context.KerdesCimkek.Add(new KerdesCimke
-                        {
-                            KerdesId = kerdes.Id,
-                            CimkeId = letezoCimke.Id
-                        });
-                    }
+                    _context.Cimkek.Add(letezoCimke);
                 }
 
-                _context.SaveChanges();
+                _context.KerdesCimkek.Add(new KerdesCimke
+                {
+                    Kerdes = kerdes,
+                    Cimke = letezoCimke
+                });
             }
+
+            _context.SaveChanges();
 
             TempData["KerdesSikeres"] = true;
 

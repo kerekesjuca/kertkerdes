@@ -54,6 +54,10 @@
     transition: 0.2s;
 }
 
+    .admin-dashboard .admin-action-btn:hover {
+        opacity: 0.9;
+    }
+
 .admin-dashboard .admin-approve {
     background: #34a853;
     color: white;
@@ -62,10 +66,6 @@
 .admin-dashboard .admin-delete {
     background: #ef4444;
     color: white;
-}
-
-.admin-dashboard .admin-action-btn:hover {
-    opacity: 0.9;
 }
 
 .admin-dashboard .admin-empty {
@@ -144,3 +144,43 @@
         min-width: 120px;
         text-align: center;
     }
+
+    .admin-actions form {
+        margin: 0;
+    }
+
+.admin-answer-card {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    gap: 24px;
+    padding: 22px 6px;
+    border-bottom: 1px solid #eef2f1;
+}
+
+    .admin-answer-card:last-child {
+        border-bottom: none;
+    }
+
+.admin-answer-body {
+    flex: 1;
+}
+
+.admin-answer-text {
+    font-size: 15px;
+    line-height: 1.7;
+    color: #374151;
+    margin-bottom: 14px;
+}
+
+.admin-answer-meta {
+    font-size: 14px;
+    color: #6b7280;
+    line-height: 1.7;
+}
+
+.admin-answer-question {
+    margin-top: 8px;
+    color: #475569;
+    font-size: 14px;
+}

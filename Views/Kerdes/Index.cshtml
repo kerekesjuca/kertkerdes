@@ -4,6 +4,20 @@
     ViewData["Title"] = "Kérdések";
 }
 
+@if (TempData["SzavazatHiba"] != null)
+{
+    <div class="alert alert-warning mt-3">
+        @TempData["SzavazatHiba"]
+    </div>
+}
+
+@if (TempData["SzavazatSiker"] != null)
+{
+    <div class="alert alert-success mt-3">
+        @TempData["SzavazatSiker"]
+    </div>
+}
+
 <div class="hero-section">
 
     <h1>Kertészeti Közösség</h1>
@@ -147,7 +161,7 @@
                     @foreach (var cimke in ViewBag.TopCimkek)
                     {
                         <a href="/Kerdes?cimke=@cimke.Nev" class="tag-link">
-                            <span>#@cimke.Nev (@cimke.Db)</span>
+                            <span class="tag-pill-inline">#@cimke.Nev (@cimke.Db)</span>
                         </a>
                     }
 

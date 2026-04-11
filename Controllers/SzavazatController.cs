@@ -1,6 +1,5 @@
 ﻿using KertKerdes.Data;
 using KertKerdes.Models;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System.Linq;
 
@@ -31,14 +30,20 @@ namespace KertKerdes.Controllers
                 return NotFound();
 
             if (kerdes.FelhasznaloId == felhasznaloId.Value)
-                return RedirectToAction("Index", "Kerdes");
+            {
+                TempData["SzavazatHiba"] = "Saját kérdésre nem szavazhatsz.";
+                return Redirect(Request.Headers["Referer"].ToString());
+            }
 
             var marSzavazott = _context.Szavazatok.FirstOrDefault(s =>
                 s.FelhasznaloId == felhasznaloId.Value &&
                 s.KerdesId == id);
 
             if (marSzavazott != null)
-                return RedirectToAction("Index", "Kerdes");
+            {
+                TempData["SzavazatHiba"] = "Erre a kérdésre már szavaztál.";
+                return Redirect(Request.Headers["Referer"].ToString());
+            }
 
             kerdes.Szavazat++;
 
@@ -51,7 +56,9 @@ namespace KertKerdes.Controllers
 
             _context.SaveChanges();
 
-            return RedirectToAction("Index", "Kerdes");
+            TempData["SzavazatSiker"] = "Szavazat rögzítve.";
+
+            return Redirect(Request.Headers["Referer"].ToString());
         }
 
         public IActionResult KerdesLe(int id)
@@ -70,14 +77,20 @@ namespace KertKerdes.Controllers
                 return NotFound();
 
             if (kerdes.FelhasznaloId == felhasznaloId.Value)
-                return RedirectToAction("Index", "Kerdes");
+            {
+                TempData["SzavazatHiba"] = "Saját kérdésre nem szavazhatsz.";
+                return Redirect(Request.Headers["Referer"].ToString());
+            }
 
             var marSzavazott = _context.Szavazatok.FirstOrDefault(s =>
                 s.FelhasznaloId == felhasznaloId.Value &&
                 s.KerdesId == id);
 
             if (marSzavazott != null)
-                return RedirectToAction("Index", "Kerdes");
+            {
+                TempData["SzavazatHiba"] = "Erre a kérdésre már szavaztál.";
+                return Redirect(Request.Headers["Referer"].ToString());
+            }
 
             kerdes.Szavazat--;
 
@@ -90,7 +103,9 @@ namespace KertKerdes.Controllers
 
             _context.SaveChanges();
 
-            return RedirectToAction("Index", "Kerdes");
+            TempData["SzavazatSiker"] = "Szavazat rögzítve.";
+
+            return Redirect(Request.Headers["Referer"].ToString());
         }
 
         public IActionResult ValaszFel(int id)
@@ -102,20 +117,30 @@ namespace KertKerdes.Controllers
                 TempData["BelepesSzukseges"] = true;
                 return RedirectToAction("Bejelentkezes", "Fiok");
             }
+
             var valasz = _context.Valaszok.FirstOrDefault(v => v.Id == id);
 
             if (valasz == null)
                 return NotFound();
 
+            if (!valasz.Jovahagyva)
+                return Redirect(Request.Headers["Referer"].ToString());
+
             if (valasz.FelhasznaloId == felhasznaloId.Value)
-                return RedirectToAction("Reszletek", "Kerdes", new { id = valasz.KerdesId });
+            {
+                TempData["SzavazatHiba"] = "Saját válaszra nem szavazhatsz.";
+                return Redirect(Request.Headers["Referer"].ToString());
+            }
 
             var marSzavazott = _context.Szavazatok.FirstOrDefault(s =>
                 s.FelhasznaloId == felhasznaloId.Value &&
                 s.ValaszId == id);
 
             if (marSzavazott != null)
-                return RedirectToAction("Reszletek", "Kerdes", new { id = valasz.KerdesId });
+            {
+                TempData["SzavazatHiba"] = "Erre a válaszra már szavaztál.";
+                return Redirect(Request.Headers["Referer"].ToString());
+            }
 
             valasz.Szavazat++;
 
@@ -128,7 +153,9 @@ namespace KertKerdes.Controllers
 
             _context.SaveChanges();
 
-            return RedirectToAction("Reszletek", "Kerdes", new { id = valasz.KerdesId });
+            TempData["SzavazatSiker"] = "Szavazat rögzítve.";
+
+            return Redirect(Request.Headers["Referer"].ToString());
         }
 
         public IActionResult ValaszLe(int id)
@@ -146,15 +173,24 @@ namespace KertKerdes.Controllers
             if (valasz == null)
                 return NotFound();
 
+            if (!valasz.Jovahagyva)
+                return Redirect(Request.Headers["Referer"].ToString());
+
             if (valasz.FelhasznaloId == felhasznaloId.Value)
-                return RedirectToAction("Reszletek", "Kerdes", new { id = valasz.KerdesId });
+            {
+                TempData["SzavazatHiba"] = "Saját válaszra nem szavazhatsz.";
+                return Redirect(Request.Headers["Referer"].ToString());
+            }
 
             var marSzavazott = _context.Szavazatok.FirstOrDefault(s =>
                 s.FelhasznaloId == felhasznaloId.Value &&
                 s.ValaszId == id);
 
             if (marSzavazott != null)
-                return RedirectToAction("Reszletek", "Kerdes", new { id = valasz.KerdesId });
+            {
+                TempData["SzavazatHiba"] = "Erre a válaszra már szavaztál.";
+                return Redirect(Request.Headers["Referer"].ToString());
+            }
 
             valasz.Szavazat--;
 
@@ -167,7 +203,9 @@ namespace KertKerdes.Controllers
 
             _context.SaveChanges();
 
-            return RedirectToAction("Reszletek", "Kerdes", new { id = valasz.KerdesId });
+            TempData["SzavazatSiker"] = "Szavazat rögzítve.";
+
+            return Redirect(Request.Headers["Referer"].ToString());
         }
     }
 }

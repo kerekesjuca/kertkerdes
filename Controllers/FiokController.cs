@@ -28,8 +28,26 @@ namespace KertKerdes.Controllers
             if (!ModelState.IsValid)
                 return View(model);
 
+            if (string.IsNullOrWhiteSpace(model.Felhasznalonev))
+            {
+                ModelState.AddModelError("Felhasznalonev", "A felhasználónév kötelező.");
+                return View(model);
+            }
+
+            if (string.IsNullOrWhiteSpace(model.Email))
+            {
+                ModelState.AddModelError("Email", "Az email cím kötelező.");
+                return View(model);
+            }
+
             var email = model.Email.Trim().ToLower();
             var felhasznalonev = model.Felhasznalonev.Trim();
+
+            if (CimkeModeraloHelper.TiltottCimke(felhasznalonev))
+            {
+                ModelState.AddModelError("Felhasznalonev", "A szöveg trágár kifejezést tartalmaz, módosítsd.");
+                return View(model);
+            }
 
             var letezoEmail = _context.Felhasznalok
                 .FirstOrDefault(f => f.Email.ToLower() == email);
@@ -67,14 +85,7 @@ namespace KertKerdes.Controllers
             _context.Felhasznalok.Add(ujFelhasznalo);
             _context.SaveChanges();
 
-            if (ervenyesSzerepkor == "Moderator")
-            {
-                TempData["RegisztracioTipus"] = "Moderator";
-            }
-            else
-            {
-                TempData["RegisztracioTipus"] = "Altalanos";
-            }
+            TempData["RegisztracioTipus"] = ervenyesSzerepkor;
 
             return RedirectToAction("Regisztracio");
         }
@@ -89,6 +100,12 @@ namespace KertKerdes.Controllers
         {
             if (!ModelState.IsValid)
                 return View(model);
+
+            if (string.IsNullOrWhiteSpace(model.Email) || string.IsNullOrWhiteSpace(model.Jelszo))
+            {
+                ViewBag.Hiba = "Hibás belépési adatok.";
+                return View(model);
+            }
 
             var email = model.Email.Trim().ToLower();
             var jelszo = model.Jelszo.Trim();

@@ -1,6 +1,5 @@
 ﻿using KertKerdes.Data;
 using KertKerdes.Models;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using System.Linq;
@@ -50,7 +49,9 @@ namespace KertKerdes.Controllers
 
                 VarakozoModeratorok = szerepkor == "Admin"
                     ? _context.Felhasznalok
-                        .Where(f => f.Szerepkor == "Moderator" && !f.ModeratorJovahagyva && !f.ModeratorElutasitva)
+                        .Where(f => f.Szerepkor == "Moderator"
+                                    && !f.ModeratorJovahagyva
+                                    && !f.ModeratorElutasitva)
                         .ToList()
                     : new List<Felhasznalo>()
             };
@@ -58,6 +59,8 @@ namespace KertKerdes.Controllers
             return View(model);
         }
 
+        [HttpPost]
+        [ValidateAntiForgeryToken]
         public IActionResult KerdesJovahagy(int id)
         {
             if (!ModeratorVagyAdmin())
@@ -66,10 +69,18 @@ namespace KertKerdes.Controllers
             var kerdes = _context.Kerdesek.FirstOrDefault(k => k.Id == id);
 
             if (kerdes == null)
-                return NotFound();
+            {
+                TempData["AdminHiba"] = "A kérdés nem található.";
+                return RedirectToAction("Index");
+            }
+
+            if (kerdes.Jovahagyva)
+            {
+                TempData["AdminHiba"] = "A kérdés már jóvá van hagyva.";
+                return RedirectToAction("Index");
+            }
 
             kerdes.Jovahagyva = true;
-
             _context.SaveChanges();
 
             TempData["AdminSiker"] = "A kérdés jóváhagyva.";
@@ -77,6 +88,8 @@ namespace KertKerdes.Controllers
             return RedirectToAction("Index");
         }
 
+        [HttpPost]
+        [ValidateAntiForgeryToken]
         public IActionResult KerdesTorles(int id)
         {
             if (!ModeratorVagyAdmin())
@@ -84,17 +97,22 @@ namespace KertKerdes.Controllers
 
             var kerdes = _context.Kerdesek.FirstOrDefault(k => k.Id == id);
 
-            if (kerdes != null)
+            if (kerdes == null)
             {
-                _context.Kerdesek.Remove(kerdes);
-                _context.SaveChanges();
+                TempData["AdminHiba"] = "A kérdés nem található.";
+                return RedirectToAction("Index");
             }
+
+            _context.Kerdesek.Remove(kerdes);
+            _context.SaveChanges();
 
             TempData["AdminSiker"] = "A kérdés törölve.";
 
             return RedirectToAction("Index");
         }
 
+        [HttpPost]
+        [ValidateAntiForgeryToken]
         public IActionResult ValaszJovahagy(int id)
         {
             if (!ModeratorVagyAdmin())
@@ -103,10 +121,18 @@ namespace KertKerdes.Controllers
             var valasz = _context.Valaszok.FirstOrDefault(v => v.Id == id);
 
             if (valasz == null)
-                return NotFound();
+            {
+                TempData["AdminHiba"] = "A válasz nem található.";
+                return RedirectToAction("Index");
+            }
+
+            if (valasz.Jovahagyva)
+            {
+                TempData["AdminHiba"] = "A válasz már jóvá van hagyva.";
+                return RedirectToAction("Index");
+            }
 
             valasz.Jovahagyva = true;
-
             _context.SaveChanges();
 
             TempData["AdminSiker"] = "A válasz jóváhagyva.";
@@ -114,6 +140,8 @@ namespace KertKerdes.Controllers
             return RedirectToAction("Index");
         }
 
+        [HttpPost]
+        [ValidateAntiForgeryToken]
         public IActionResult ValaszTorles(int id)
         {
             if (!ModeratorVagyAdmin())
@@ -121,17 +149,22 @@ namespace KertKerdes.Controllers
 
             var valasz = _context.Valaszok.FirstOrDefault(v => v.Id == id);
 
-            if (valasz != null)
+            if (valasz == null)
             {
-                _context.Valaszok.Remove(valasz);
-                _context.SaveChanges();
+                TempData["AdminHiba"] = "A válasz nem található.";
+                return RedirectToAction("Index");
             }
+
+            _context.Valaszok.Remove(valasz);
+            _context.SaveChanges();
 
             TempData["AdminSiker"] = "A válasz törölve.";
 
             return RedirectToAction("Index");
         }
 
+        [HttpPost]
+        [ValidateAntiForgeryToken]
         public IActionResult ModeratorJovahagy(int id)
         {
             if (!CsakAdmin())
@@ -143,7 +176,10 @@ namespace KertKerdes.Controllers
             var felhasznalo = _context.Felhasznalok.FirstOrDefault(f => f.Id == id);
 
             if (felhasznalo == null)
-                return NotFound();
+            {
+                TempData["AdminHiba"] = "A felhasználó nem található.";
+                return RedirectToAction("Index");
+            }
 
             felhasznalo.ModeratorJovahagyva = true;
             felhasznalo.ModeratorElutasitva = false;
@@ -155,6 +191,8 @@ namespace KertKerdes.Controllers
             return RedirectToAction("Index");
         }
 
+        [HttpPost]
+        [ValidateAntiForgeryToken]
         public IActionResult ModeratorElutasit(int id)
         {
             if (!CsakAdmin())
@@ -166,7 +204,10 @@ namespace KertKerdes.Controllers
             var felhasznalo = _context.Felhasznalok.FirstOrDefault(f => f.Id == id);
 
             if (felhasznalo == null)
-                return NotFound();
+            {
+                TempData["AdminHiba"] = "A felhasználó nem található.";
+                return RedirectToAction("Index");
+            }
 
             felhasznalo.ModeratorElutasitva = true;
             felhasznalo.ModeratorJovahagyva = false;

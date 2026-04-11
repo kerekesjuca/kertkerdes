@@ -4,6 +4,20 @@
     ViewData["Title"] = "Kérdés részletei";
 }
 
+@if (TempData["SzavazatHiba"] != null)
+{
+    <div class="alert alert-warning mt-3">
+        @TempData["SzavazatHiba"]
+    </div>
+}
+
+@if (TempData["SzavazatSiker"] != null)
+{
+    <div class="alert alert-success mt-3">
+        @TempData["SzavazatSiker"]
+    </div>
+}
+
 <div class="container mt-4 question-layout">
 
     <div class="mb-4">
@@ -161,12 +175,18 @@
         <h5>Válaszolj a kérdésre</h5>
 
         <form method="post" action="/Valasz/Letrehozas">
+            @if (TempData["ValaszHiba"] != null)
+            {
+                <div class="alert alert-danger mb-3">
+                    @TempData["ValaszHiba"]
+                </div>
+            }
             <input type="hidden" name="KerdesId" value="@Model.Id" />
 
             <textarea name="Szoveg"
-                      class="form-control mb-3"
-                      rows="5"
-                      placeholder="Írd le a válaszod részletesen..."></textarea>
+                  class="form-control mb-3"
+                  rows="5"
+                  placeholder="Írd le a válaszod részletesen...">@TempData["ValaszSzoveg"]</textarea>
 
             <button type="submit" class="btn-modern-green">
                 <i class="bi bi-send"></i> Válasz beküldése

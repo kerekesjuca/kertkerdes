@@ -1,7 +1,8 @@
-﻿using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Http;
-using KertKerdes.Data;
+﻿using KertKerdes.Data;
+using KertKerdes.Helpers;
 using KertKerdes.Models;
+using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Linq;
 
@@ -30,6 +31,16 @@ namespace KertKerdes.Controllers
             if (string.IsNullOrWhiteSpace(valasz.Szoveg))
             {
                 TempData["ValaszHiba"] = "A válasz szövege nem lehet üres.";
+                TempData["ValaszSzoveg"] = valasz.Szoveg;
+
+                return RedirectToAction("Reszletek", "Kerdes", new { id = valasz.KerdesId });
+            }
+
+            if (CimkeModeraloHelper.TiltottCimke(valasz.Szoveg))
+            {
+                TempData["ValaszHiba"] = "A szöveg trágár kifejezést tartalmaz, módosítsd.";
+                TempData["ValaszSzoveg"] = valasz.Szoveg;
+
                 return RedirectToAction("Reszletek", "Kerdes", new { id = valasz.KerdesId });
             }
 
@@ -47,6 +58,8 @@ namespace KertKerdes.Controllers
             return RedirectToAction("Reszletek", "Kerdes", new { id = valasz.KerdesId });
         }
 
+        [HttpPost]
+        [ValidateAntiForgeryToken]
         public IActionResult Elfogad(int id)
         {
             var valasz = _context.Valaszok.FirstOrDefault(v => v.Id == id);
@@ -57,6 +70,9 @@ namespace KertKerdes.Controllers
             if (!valasz.Jovahagyva)
                 return RedirectToAction("Reszletek", "Kerdes", new { id = valasz.KerdesId });
 
+            if (valasz.Elfogadott)
+                return RedirectToAction("Reszletek", "Kerdes", new { id = valasz.KerdesId });
+
             var kerdes = _context.Kerdesek.FirstOrDefault(k => k.Id == valasz.KerdesId);
 
             if (kerdes == null)
@@ -65,9 +81,6 @@ namespace KertKerdes.Controllers
             var aktualisFelhasznaloId = HttpContext.Session.GetInt32("FelhasznaloId");
 
             if (aktualisFelhasznaloId == null || kerdes.FelhasznaloId != aktualisFelhasznaloId.Value)
-                return Unauthorized();
-
-            if (valasz.FelhasznaloId == aktualisFelhasznaloId.Value)
                 return Unauthorized();
 
             var korabbanElfogadottValaszok = _context.Valaszok
@@ -87,12 +100,18 @@ namespace KertKerdes.Controllers
 
             return RedirectToAction("Reszletek", "Kerdes", new { id = kerdes.Id });
         }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
         public IActionResult ElfogadasVisszavon(int id)
         {
             var valasz = _context.Valaszok.FirstOrDefault(v => v.Id == id);
 
             if (valasz == null)
                 return NotFound();
+
+            if (!valasz.Jovahagyva)
+                return RedirectToAction("Reszletek", "Kerdes", new { id = valasz.KerdesId });
 
             var kerdes = _context.Kerdesek.FirstOrDefault(k => k.Id == valasz.KerdesId);
 
@@ -113,6 +132,4 @@ namespace KertKerdes.Controllers
             return RedirectToAction("Reszletek", "Kerdes", new { id = kerdes.Id });
         }
     }
-
 }
-

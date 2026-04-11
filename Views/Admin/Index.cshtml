@@ -70,30 +70,47 @@
                     {
                         @foreach (var felhasznalo in Model.VarakozoModeratorok)
                         {
-                            <div class="admin-row">
+                            <div class="admin-answer-card">
 
-                                <div>
-                                    <strong>@felhasznalo.Felhasznalonev</strong><br />
-                                    <small>@felhasznalo.Email</small><br />
+                                <div class="admin-answer-body">
 
-                                    <span class="status-badge status-approved">
-                                        Moderátor kérés
-                                    </span>
+                                    <div class="admin-answer-text">
+                                        <strong>@felhasznalo.Felhasznalonev</strong>
+                                    </div>
+
+                                    <div class="admin-answer-meta">
+
+                                        <span class="status-badge status-approved">
+                                            Moderátor kérés
+                                        </span>
+
+                                        <div class="admin-answer-question">
+                                            @felhasznalo.Email
+                                        </div>
+
+                                    </div>
+
                                 </div>
 
-                                <div>
+                                <div class="admin-actions">
+
                                     @if (!felhasznalo.ModeratorJovahagyva && !felhasznalo.ModeratorElutasitva)
                                     {
-                                        <a href="/Admin/ModeratorJovahagy/@felhasznalo.Id"
-                                           class="admin-action-btn admin-approve">
-                                            Jóváhagyás
-                                        </a>
+                                        <form method="post" action="/Admin/ModeratorJovahagy/@felhasznalo.Id">
+                                            @Html.AntiForgeryToken()
+                                            <button type="submit" class="admin-action-btn admin-approve border-0">
+                                                Jóváhagyás
+                                            </button>
+                                        </form>
 
-                                        <a href="/Admin/ModeratorElutasit/@felhasznalo.Id"
-                                           class="admin-action-btn admin-delete">
-                                            Elutasítás
-                                        </a>
+                                        <form method="post" action="/Admin/ModeratorElutasit/@felhasznalo.Id">
+                                            @Html.AntiForgeryToken()
+                                            <button type="submit" class="admin-action-btn admin-delete border-0">
+                                                Elutasítás
+                                            </button>
+                                        </form>
                                     }
+
                                 </div>
 
                             </div>
@@ -151,15 +168,19 @@
                                         Megtekintés
                                     </a>
 
-                                    <a href="/Admin/KerdesJovahagy/@kerdes.Id"
-                                       class="admin-action-btn admin-approve">
-                                        Jóváhagyás
-                                    </a>
+                                    <form method="post" action="/Admin/KerdesJovahagy/@kerdes.Id">
+                                        @Html.AntiForgeryToken()
+                                        <button type="submit" class="admin-action-btn admin-approve border-0">
+                                            Jóváhagyás
+                                        </button>
+                                    </form>
 
-                                    <a href="/Admin/KerdesTorles/@kerdes.Id"
-                                       class="admin-action-btn admin-delete">
-                                        Törlés
-                                    </a>
+                                    <form method="post" action="/Admin/KerdesTorles/@kerdes.Id">
+                                        @Html.AntiForgeryToken()
+                                        <button type="submit" class="admin-action-btn admin-delete border-0">
+                                            Törlés
+                                        </button>
+                                    </form>
                                 </div>
                             </div>
                         }
@@ -191,42 +212,54 @@
                     {
                         @foreach (var valasz in Model.VarakozoValaszok)
                         {
-                            <div class="admin-row">
+                            <div class="admin-answer-card">
 
-                                <div>
-                                    <small>@valasz.Szoveg</small><br />
+                                <div class="admin-answer-body">
 
-                                    <span class="status-badge status-waiting">
-                                        Jóváhagyásra vár
-                                    </span>
+                                    <div class="admin-answer-text">
+                                        @valasz.Szoveg
+                                    </div>
 
-                                    @if (valasz.Kerdes != null)
-                                    {
-                                        <br />
-                                        <small class="text-muted">
-                                            Kérdés: @valasz.Kerdes.Cim
-                                        </small>
-                                    }
+                                    <div class="admin-answer-meta">
 
-                                    @if (valasz.Felhasznalo != null)
-                                    {
-                                        <br />
-                                        <small class="text-muted">
-                                            @valasz.Felhasznalo.Felhasznalonev · @valasz.Datum.ToShortDateString()
-                                        </small>
-                                    }
+                                        <span class="status-badge status-waiting">
+                                            Jóváhagyásra vár
+                                        </span>
+
+                                        @if (valasz.Kerdes != null)
+                                        {
+                                            <div class="admin-answer-question">
+                                                Kérdés: @valasz.Kerdes.Cim
+                                            </div>
+                                        }
+
+                                        @if (valasz.Felhasznalo != null)
+                                        {
+                                            <div>
+                                                @valasz.Felhasznalo.Felhasznalonev · @valasz.Datum.ToShortDateString()
+                                            </div>
+                                        }
+
+                                    </div>
+
                                 </div>
 
-                                <div>
-                                    <a href="/Admin/ValaszJovahagy/@valasz.Id"
-                                       class="admin-action-btn admin-approve">
-                                        Jóváhagyás
-                                    </a>
+                                <div class="admin-actions">
 
-                                    <a href="/Admin/ValaszTorles/@valasz.Id"
-                                       class="admin-action-btn admin-delete">
-                                        Törlés
-                                    </a>
+                                    <form method="post" action="/Admin/ValaszJovahagy/@valasz.Id">
+                                        @Html.AntiForgeryToken()
+                                        <button type="submit" class="admin-action-btn admin-approve border-0">
+                                            Jóváhagyás
+                                        </button>
+                                    </form>
+
+                                    <form method="post" action="/Admin/ValaszTorles/@valasz.Id">
+                                        @Html.AntiForgeryToken()
+                                        <button type="submit" class="admin-action-btn admin-delete border-0">
+                                            Törlés
+                                        </button>
+                                    </form>
+
                                 </div>
 
                             </div>

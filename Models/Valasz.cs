@@ -1,4 +1,5 @@
 ﻿using System;
+using System.ComponentModel.DataAnnotations;
 
 namespace KertKerdes.Models
 {
@@ -10,9 +11,10 @@ namespace KertKerdes.Models
 
         public int FelhasznaloId { get; set; }
 
+        [Required]
         public string Szoveg { get; set; } = string.Empty;
 
-        public DateTime Datum { get; set; } = DateTime.Now;
+        public DateTime Datum { get; set; }
 
         public bool Jovahagyva { get; set; }
 

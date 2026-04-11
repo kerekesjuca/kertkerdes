@@ -9,52 +9,48 @@
     <div class="card-body p-4">
 
         <h2 class="mb-4">
-
             <i class="bi bi-plus-circle"></i>
             Új kérdés feltevése
-
         </h2>
 
         <form method="post">
 
+            <div asp-validation-summary="All" class="text-danger mb-3"></div>
+
             <div class="mb-4">
 
                 <label class="form-label">
-
                     <i class="bi bi-pencil"></i>
                     Kérdés címe
-
                 </label>
 
                 <input asp-for="Cim"
                        class="form-control form-control-lg" />
 
-            </div>
+                <span asp-validation-for="Cim" class="text-danger"></span>
 
+            </div>
 
             <div class="mb-4">
 
                 <label class="form-label">
-
                     <i class="bi bi-card-text"></i>
                     Kérdés leírása
-
                 </label>
 
                 <textarea asp-for="Leiras"
                           class="form-control"
                           rows="5"></textarea>
 
-            </div>
+                <span asp-validation-for="Leiras" class="text-danger"></span>
 
+            </div>
 
             <div class="mb-4">
 
                 <label class="form-label">
-
                     <i class="bi bi-tag"></i>
                     Témakör
-
                 </label>
 
                 <select asp-for="TemakorId"
@@ -63,9 +59,7 @@
                     @foreach (var temakor in ViewBag.Temakorok)
                     {
                         <option value="@temakor.Id">
-
                             @temakor.Nev
-
                         </option>
                     }
 
@@ -73,34 +67,37 @@
 
             </div>
 
-
             <div class="mb-4">
 
                 <label class="form-label">
-
                     <i class="bi bi-tags"></i>
                     Címkék
-
                 </label>
+
+                <div class="form-text mb-2">
+                    A kérdéshez tartozó címkéket vesszővel elválasztva add meg.
+                    Például: paradicsom, levéltetű, bio
+                </div>
 
                 <input type="text"
                        name="ujCimkek"
+                       value="@(Context.Request.HasFormContentType? Context.Request.Form["ujCimkek"].ToString() : "")"
                        class="form-control"
                        placeholder="pl.: paradicsom, levéltetű, bio" />
 
-                <small class="text-muted">
-                    Több címkét vesszővel válassz el.
-                </small>
+                @if (ViewData.ModelState.ContainsKey("ujCimkek"))
+                {
+                    <span class="text-danger">
+                        @ViewData.ModelState["ujCimkek"]?.Errors.FirstOrDefault()?.ErrorMessage
+                    </span>
+                }
 
             </div>
 
-
             <button type="submit"
                     class="btn btn-success btn-lg">
-
                 <i class="bi bi-send"></i>
                 Beküldés
-
             </button>
 
         </form>
@@ -108,3 +105,7 @@
     </div>
 
 </div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}
