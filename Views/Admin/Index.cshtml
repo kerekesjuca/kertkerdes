@@ -4,20 +4,6 @@
     ViewData["Title"] = "Moderátori felület";
 }
 
-@if (TempData["AdminSiker"] != null)
-{
-    <div class="alert alert-success">
-        @TempData["AdminSiker"]
-    </div>
-}
-
-@if (TempData["AdminHiba"] != null)
-{
-    <div class="alert alert-danger">
-        @TempData["AdminHiba"]
-    </div>
-}
-
 <div class="admin-dashboard">
 
     <div class="admin-header">
@@ -163,6 +149,7 @@
                                 </div>
 
                                 <div class="admin-actions">
+
                                     <a href="/Kerdes/Reszletek/@kerdes.Id"
                                        class="admin-action-btn">
                                         Megtekintés
@@ -181,7 +168,9 @@
                                             Törlés
                                         </button>
                                     </form>
+
                                 </div>
+
                             </div>
                         }
                     }

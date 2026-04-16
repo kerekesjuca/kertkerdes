@@ -103,7 +103,21 @@ namespace KertKerdes.Controllers
                 return RedirectToAction("Index");
             }
 
+            var kerdesValaszok = _context.Valaszok
+                .Where(v => v.KerdesId == id)
+                .ToList();
+
+            var valaszIdk = kerdesValaszok.Select(v => v.Id).ToList();
+
+            var kapcsolodoSzavazatok = _context.Szavazatok
+                .Where(s => s.KerdesId == id || (s.ValaszId != null && valaszIdk.Contains(s.ValaszId.Value)))
+                .ToList();
+
+            if (kapcsolodoSzavazatok.Any())
+                _context.Szavazatok.RemoveRange(kapcsolodoSzavazatok);
+
             _context.Kerdesek.Remove(kerdes);
+
             _context.SaveChanges();
 
             TempData["AdminSiker"] = "A kérdés törölve.";
@@ -155,7 +169,15 @@ namespace KertKerdes.Controllers
                 return RedirectToAction("Index");
             }
 
+            var kapcsolodoSzavazatok = _context.Szavazatok
+                .Where(s => s.ValaszId == id)
+                .ToList();
+
+            if (kapcsolodoSzavazatok.Any())
+                _context.Szavazatok.RemoveRange(kapcsolodoSzavazatok);
+
             _context.Valaszok.Remove(valasz);
+
             _context.SaveChanges();
 
             TempData["AdminSiker"] = "A válasz törölve.";

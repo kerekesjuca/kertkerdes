@@ -116,6 +116,49 @@
 
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
 
+    @if (TempData["AdminSiker"] != null || TempData["AdminHiba"] != null || TempData["SzavazatSiker"] != null || TempData["SzavazatHiba"] != null)
+    {
+        var uzenet = TempData["AdminSiker"]
+        ?? TempData["AdminHiba"]
+        ?? TempData["SzavazatSiker"]
+        ?? TempData["SzavazatHiba"];
+
+        var sikeres = TempData["AdminSiker"] != null || TempData["SzavazatSiker"] != null;
+
+        <div id="globalModal"
+             class="modal fade show"
+             style="display:block; background:rgba(0,0,0,0.45);"
+             tabindex="-1">
+
+            <div class="modal-dialog modal-dialog-centered">
+
+                <div class="modal-content border-0 rounded-4 shadow">
+
+                    <div class="modal-body text-center p-4">
+
+                        <div class="mb-3 fs-1 @(sikeres ? "text-success" : "text-warning")">
+                            <i class="bi @(sikeres ? "bi-check-circle-fill" : "bi-exclamation-triangle-fill")"></i>
+                        </div>
+
+                        <h4>@uzenet</h4>
+
+                        <div class="mt-4">
+                            <button type="button"
+                                    class="btn btn-success rounded-pill px-4"
+                                    onclick="document.getElementById('globalModal').style.display='none';">
+                                Rendben
+                            </button>
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+    }
+
     @await RenderSectionAsync("Scripts", required: false)
 
 </body>

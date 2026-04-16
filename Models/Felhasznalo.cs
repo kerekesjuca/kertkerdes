@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace KertKerdes.Models
 {
@@ -8,14 +9,22 @@ namespace KertKerdes.Models
     {
         public int Id { get; set; }
 
-        [Required]
+        [Required(ErrorMessage = "A felhasználónév megadása kötelező.")]
         public string Felhasznalonev { get; set; } = string.Empty;
 
-        [Required]
+        [Required(ErrorMessage = "Az e-mail cím megadása kötelező.")]
         public string Email { get; set; } = string.Empty;
 
         [Required]
         public string JelszoHash { get; set; } = string.Empty;
+
+        [NotMapped]
+        [Required(ErrorMessage = "A jelszó megadása kötelező.")]
+        public string Jelszo { get; set; } = string.Empty;
+
+        [NotMapped]
+        [Required(ErrorMessage = "A jelszó megerősítése kötelező.")]
+        public string JelszoUjra { get; set; } = string.Empty;
 
         [Required]
         public string Szerepkor { get; set; } = "Altalanos";

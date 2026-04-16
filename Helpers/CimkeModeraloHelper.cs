@@ -53,7 +53,12 @@ namespace KertKerdes.Helpers
 
             var kisbetus = szoveg.Trim().ToLower();
 
-            return TiltottSzavak.Any(t => kisbetus.Contains(t));
+            var szavak = kisbetus
+                .Split(' ', ',', '.', ';', ':', '!', '?', '-', '_')
+                .Where(s => !string.IsNullOrWhiteSpace(s))
+                .ToList();
+
+            return szavak.Any(szo => TiltottSzavak.Contains(szo));
         }
     }
 }

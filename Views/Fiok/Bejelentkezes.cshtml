@@ -22,14 +22,20 @@
     <form method="post" id="belepes-form">
 
         <input asp-for="Email"
-               class="form-control mb-3"
+               class="form-control mb-1"
                placeholder="Email cím"
                value="@Model?.Email" />
 
+        <span asp-validation-for="Email" class="text-danger d-block mb-3"></span>
+
         <input asp-for="Jelszo"
                type="password"
-               class="form-control mb-3"
+               class="form-control mb-1"
                placeholder="Jelszó" />
+
+        <span asp-validation-for="Jelszo" class="text-danger d-block mb-3"></span>
+
+        <br />
 
         <button type="submit"
                 class="btn-modern-green">
@@ -85,4 +91,8 @@
         </div>
 
     </div>
+}
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
 }

@@ -11,7 +11,7 @@ namespace KertKerdes.Models
 
         public int FelhasznaloId { get; set; }
 
-        [Required]
+        [Required(ErrorMessage = "A válasz szövege kötelező.")]
         public string Szoveg { get; set; } = string.Empty;
 
         public DateTime Datum { get; set; }

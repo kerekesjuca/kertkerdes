@@ -4,10 +4,10 @@ namespace KertKerdes.Models
 {
     public class BejelentkezesViewModel
     {
-        [Required]
+        [Required(ErrorMessage = "Az e-mail cím megadása kötelező.")]
         public string Email { get; set; } = "";
 
-        [Required]
+        [Required(ErrorMessage = "A jelszó megadása kötelező.")]
         public string Jelszo { get; set; } = "";
     }
 }

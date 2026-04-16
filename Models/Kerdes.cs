@@ -8,10 +8,10 @@ namespace KertKerdes.Models
     {
         public int Id { get; set; }
 
-        [Required]
+        [Required(ErrorMessage = "A kérdés címe kötelező.")]
         public string Cim { get; set; } = string.Empty;
 
-        [Required]
+        [Required(ErrorMessage = "A kérdés leírása kötelező.")]
         public string Leiras { get; set; } = string.Empty;
 
         public int FelhasznaloId { get; set; }

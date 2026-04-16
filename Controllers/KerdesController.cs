@@ -91,6 +91,8 @@ namespace KertKerdes.Controllers
         [HttpPost]
         public IActionResult Letrehozas(Kerdes kerdes, string ujCimkek)
         {
+            ModelState.Remove("ujCimkek");
+
             var felhasznaloId = HttpContext.Session.GetInt32("FelhasznaloId");
 
             if (felhasznaloId == null)
@@ -99,24 +101,14 @@ namespace KertKerdes.Controllers
                 return RedirectToAction("Bejelentkezes", "Fiok");
             }
 
-            if (string.IsNullOrWhiteSpace(kerdes.Cim))
-            {
-                ModelState.AddModelError("Cim", "A kérdés címe kötelező.");
-            }
-
-            if (string.IsNullOrWhiteSpace(kerdes.Leiras))
-            {
-                ModelState.AddModelError("Leiras", "A kérdés leírása kötelező.");
-            }
-
             if (CimkeModeraloHelper.TiltottCimke(kerdes.Cim))
             {
-                ModelState.AddModelError("Cim", "A szöveg trágár kifejezést tartalmaz, módosítsd.");
+                ModelState.AddModelError("Cim", "A kérdés címe tiltott kifejezést tartalmaz.");
             }
 
             if (CimkeModeraloHelper.TiltottCimke(kerdes.Leiras))
             {
-                ModelState.AddModelError("Leiras", "A szöveg trágár kifejezést tartalmaz, módosítsd.");
+                ModelState.AddModelError("Leiras", "A kérdés leírása tiltott kifejezést tartalmaz.");
             }
 
             List<string> egyediCimkek = new();
@@ -133,7 +125,7 @@ namespace KertKerdes.Controllers
                 {
                     if (CimkeModeraloHelper.TiltottCimke(cimkeNev))
                     {
-                        ModelState.AddModelError("ujCimkek", "A szöveg trágár kifejezést tartalmaz, módosítsd.");
+                        ModelState.AddModelError("ujCimkek", "A címkék között tiltott kifejezés szerepel.");
                         break;
                     }
                 }

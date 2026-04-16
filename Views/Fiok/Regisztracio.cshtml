@@ -10,31 +10,29 @@
 
     <form method="post">
 
-        <div asp-validation-summary="All" class="text-danger mb-3"></div>
-
         <input asp-for="Felhasznalonev"
-               class="form-control mb-2"
+               class="form-control mb-1"
                placeholder="Felhasználónév"
                value="@Model?.Felhasznalonev" />
-        <span asp-validation-for="Felhasznalonev" class="text-danger"></span>
+        <span asp-validation-for="Felhasznalonev" class="text-danger d-block mb-3"></span>
 
         <input asp-for="Email"
-               class="form-control mb-2"
+               class="form-control mb-1"
                placeholder="Email"
                value="@Model?.Email" />
-        <span asp-validation-for="Email" class="text-danger"></span>
+        <span asp-validation-for="Email" class="text-danger d-block mb-3"></span>
 
         <input asp-for="Jelszo"
                type="password"
-               class="form-control mb-2"
+               class="form-control mb-1"
                placeholder="Jelszó" />
-        <span asp-validation-for="Jelszo" class="text-danger"></span>
+        <span asp-validation-for="Jelszo" class="text-danger d-block mb-3"></span>
 
         <input asp-for="JelszoUjra"
                type="password"
-               class="form-control mb-2"
+               class="form-control mb-1"
                placeholder="Jelszó újra" />
-        <span asp-validation-for="JelszoUjra" class="text-danger"></span>
+        <span asp-validation-for="JelszoUjra" class="text-danger d-block mb-3"></span>
 
         <div class="dropdown-wrapper">
             <select asp-for="Szerepkor" class="form-control mb-3 custom-select-modern">
